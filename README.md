@@ -13,6 +13,6 @@ Python 2 (version 2.7 or later), or Python 3 (version 3.3 or later).
 ## Usage
 ### Windows
 drag *.apk/*.aar/*.dex/*.jar to `drag_here_if_windows.bat`,
-`jd-gui` will automatically open.
+`jd-gui` will be automatically opened.
 ### Mac or Linux
 python showjar.py *.apk/*.aar/*.dex/*.jar
