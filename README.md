@@ -1,5 +1,5 @@
 # AndroidOneKeyDecompiler
-A tool to help quickly decompile apk.
+A tool to help quickly decompile apk, update the tools version as appropriate.
 
 dex2jar="dex2jar-2.1-SNAPSHOT\d2j-dex2jar.bat"
 jdgui="jd-gui-1.4.0.jar"
