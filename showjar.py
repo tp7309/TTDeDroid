@@ -51,7 +51,6 @@ if __name__=="__main__":
         with zipfile.ZipFile(f, 'r') as zip:
         	zip.extractall(tempDir)
         dstPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "classes.jar")
-        os.remove(dstPath)
         shutil.move(os.path.join(tempDir, "classes.jar"), dstPath)
         shutil.rmtree(tempDir)
         jar = "classes.jar"	
