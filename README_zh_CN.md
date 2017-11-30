@@ -3,7 +3,7 @@
 
 dex2jar="dex2jar-2.1-SNAPSHOT\d2j-dex2jar.bat"
 jdgui="jd-gui-1.4.0.jar"
-apktool="apktool_2.2.4.jar"
+apktool="apktool_2.3.0.jar"
 
 # 使用要求
 需要Python环境，没有的[下载](https://www.python.org/downloads/)一个默认安装完成即可。

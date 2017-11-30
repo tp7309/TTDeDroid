@@ -3,7 +3,7 @@ A tool to help quickly decompile apk, update the tools version as appropriate.
 
 dex2jar="dex2jar-2.1-SNAPSHOT\d2j-dex2jar.bat"
 jdgui="jd-gui-1.4.0.jar"
-apktool="apktool_2.2.4.jar"
+apktool="apktool_2.3.0.jar"
 
 README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/blob/master/README_zh_CN.md)
 

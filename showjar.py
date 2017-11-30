@@ -17,7 +17,7 @@ import zipfile
 dex2jar="dex2jar-2.1-SNAPSHOT\d2j-dex2jar.bat"
 if not os.name == 'nt': dex2jar = "./dex2jar-2.1-SNAPSHOT/d2j-dex2jar.sh"
 jdgui="jd-gui-1.4.0.jar"
-apktool="apktool_2.2.4.jar"
+apktool="apktool_2.3.0.jar"
 needUnzipFiles=['patch.jar']
 needDecompileResources=0
 
@@ -37,14 +37,22 @@ if __name__=="__main__":
     # fix windows path
     if ":\\" in f and not ":\\\\" in f:
             f = f.replace("\\", "\\\\")
+    dexes = []
+    jars = []
     if f.endswith(".apk") or f in needUnzipFiles:
         print("unzip %s..."%(f))
         tempDir = os.path.splitext(f)[0]
         with zipfile.ZipFile(f, 'r') as zip:
             zip.extractall(tempDir)
-        sh("%s -f %s"%(dex2jar, os.path.join(tempDir, "classes.dex")))
+        dexes = [f for f in os.listdir(tempDir) if f.endswith('.dex')]
+        print("founded dexes: " + ', '.join(dexes))
+        for file in os.listdir(tempDir):
+            if file.endswith('-dex2jar.jar') and os.path.exists(file):
+                os.remove(file)
+        for dex in dexes:
+            sh("%s -f %s"%(dex2jar, os.path.join(tempDir, dex)))
+            jars.append(os.path.splitext(dex)[0] + "-dex2jar.jar")
         shutil.rmtree(tempDir)
-        jar = "classes-dex2jar.jar"
     elif f.endswith(".aar"):
         print("unzip %s..."%(f))
         tempDir = os.path.splitext(f)[0]
@@ -53,17 +61,20 @@ if __name__=="__main__":
         dstPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "classes.jar")
         shutil.move(os.path.join(tempDir, "classes.jar"), dstPath)
         shutil.rmtree(tempDir)
-        jar = "classes.jar"	
+        jars.append("classes.jar")	
     elif f.endswith(".dex"):
         sh("%s -f %s"%(dex2jar, f))
-        jar = os.path.splitext(f)[0] + "-dex2jar.jar"
+        jars.append(os.path.splitext(f)[0] + "-dex2jar.jar")
     elif f.endswith(".jar"):
-        jar = f
+        jars.append(f)
     else:
         print("error file extension!")
         exit
 
     if needDecompileResources and f.endswith(".apk") or f in needUnzipFiles:
-            sh("java -jar %s d %s"%(apktool, f))
-    sh("java -jar %s %s"%(jdgui, jar))
+        print("decompile resources...")
+        sh("java -jar %s d %s"%(apktool, f))
+        print("decompile resources done")
+            
+    sh("java -jar %s %s"%(jdgui, ' '.join(jars) if len(jars)> 0 else jars[0]))
     print("Done")
