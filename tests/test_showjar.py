@@ -21,9 +21,10 @@ def sh(command, print_msg=True):
 
 
 def get_another_apk_path():
-    # if os.name == 'nt':
-    #     return "d:\\%s"%(TEST_APK)
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_cache', TEST_APK)
+    test_cache = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_cache')
+    if not os.path.exists(test_cache):
+        os.makedirs(test_cache)
+    return os.path.join(test_cache, TEST_APK)
 
 
 class Test_emulator_port(unittest.TestCase):
@@ -31,6 +32,7 @@ class Test_emulator_port(unittest.TestCase):
     def setUpClass(cls):
         super(Test_emulator_port, cls).setUpClass()
         test_cache = get_another_apk_path()
+        
 
         showjar._TEST_MODE = True
 
@@ -48,7 +50,7 @@ class Test_emulator_port(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         super(Test_emulator_port, cls).tearDownClass()
-        shutil.rmtree(os.path.dirname(get_another_apk_path()))
+        shutil.rmtree(os.path.dirname(get_another_apk_path()), True)
 
         showjar._TEST_MODE = False
 
