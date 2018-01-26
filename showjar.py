@@ -18,6 +18,7 @@ import zipfile
 _DEX2JAR = os.path.join('libs', 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.bat')
 if not os.name == 'nt':
     _DEX2JAR = os.path.join('libs', 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.sh')
+    os.system("chmod +x %s"%(_DEX2JAR))
 _JDGUI = os.path.join('libs', 'jd-gui-1.4.0.jar')
 _APKTOOL = os.path.join('libs', 'apktool_2.3.0.jar')
 
