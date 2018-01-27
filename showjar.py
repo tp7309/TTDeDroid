@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-#author: tp7309
+# author: tp7309
 # usage:
 # python showjar.py *.apk/*.aar/*.dex/*.jar
-
 
 from __future__ import print_function
 
@@ -14,13 +13,13 @@ import subprocess
 import sys
 import zipfile
 
-
-_DEX2JAR = os.path.join('libs', 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.bat')
+_LIBS = os.path.abspath('libs')
+_DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.bat')
 if not os.name == 'nt':
-    _DEX2JAR = os.path.join('libs', 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.sh')
-    os.system("chmod +x %s"%(_DEX2JAR))
-_JDGUI = os.path.join('libs', 'jd-gui-1.4.0.jar')
-_APKTOOL = os.path.join('libs', 'apktool_2.3.0.jar')
+    _DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.sh')
+    os.system("chmod +x %s" % (_DEX2JAR))
+_JDGUI = os.path.join(_LIBS, 'jd-gui-1.4.0.jar')
+_APKTOOL = os.path.join(_LIBS, 'apktool_2.3.0.jar')
 
 _CACHE_DIR = 'cache'
 _NEED_UNZIP_FILES = ['patch.jar']
@@ -34,14 +33,14 @@ _NEED_DECOMPILE_RESOURCES = 0
 
 
 def sh(command):
-    p = subprocess.Popen(command, shell=True,
-                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = subprocess.Popen(
+        command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(p.stdout.read())
 
 
 def main(f):
     # fix windows path
-    if ":\\" in f and not ":\\\\" in f:
+    if ":\\" in f and ":\\\\" not in f:
         f = f.replace("\\", "\\\\")
 
     # build cache dir
@@ -51,12 +50,17 @@ def main(f):
 
     dexes = []
     jars = []
-    temp_dir = os.path.abspath(os.path.join(_CACHE_DIR, os.path.splitext(os.path.basename(f))[0]))
+    temp_dir = os.path.abspath(
+        os.path.join(_CACHE_DIR,
+                     os.path.splitext(os.path.basename(f))[0]))
     if f.endswith(".apk") or f in _NEED_UNZIP_FILES:
         print("unzip %s..." % (f))
         with zipfile.ZipFile(f, 'r') as z:
             z.extractall(temp_dir)
-        dexes = [os.path.join(temp_dir, f) for f in os.listdir(temp_dir) if f.endswith('.dex')]
+        dexes = [
+            os.path.join(temp_dir, f) for f in os.listdir(temp_dir)
+            if f.endswith('.dex')
+        ]
         print("founded dexes: " + ', '.join(dexes))
         for dex in dexes:
             dest = os.path.splitext(dex)[0] + "-dex2jar.jar"
@@ -78,13 +82,14 @@ def main(f):
         print("error file extension!")
         return
 
-    if _NEED_DECOMPILE_RESOURCES and f.endswith(".apk") or f in _NEED_UNZIP_FILES:
+    if _NEED_DECOMPILE_RESOURCES and f.endswith(
+            ".apk") or f in _NEED_UNZIP_FILES:
         print("decompile resources...")
         sh("java -jar %s d %s -o %s" % (_APKTOOL, f, _CACHE_DIR))
         print("decompile resources done")
 
     if jars and not _TEST_MODE:
-        sh("java -jar %s %s" %(_JDGUI, ' '.join(jars)))
+        sh("java -jar %s %s" % (_JDGUI, ' '.join(jars)))
     print("Done")
 
 
