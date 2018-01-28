@@ -14,10 +14,11 @@ import sys
 import zipfile
 
 _LIBS = os.path.abspath('libs')
-_DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.bat')
+_DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
+                        'd2j-dex2jar.bat')
 if not os.name == 'nt':
-    _DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-SNAPSHOT', 'd2j-dex2jar.sh')
-    os.system("chmod +x %s" % (_DEX2JAR))
+    _DEX2JAR = 'sh ' + os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
+                                    'd2j-dex2jar.sh')
 _JDGUI = os.path.join(_LIBS, 'jd-gui-1.4.0.jar')
 _APKTOOL = os.path.join(_LIBS, 'apktool_2.3.0.jar')
 
@@ -58,8 +59,8 @@ def main(f):
         with zipfile.ZipFile(f, 'r') as z:
             z.extractall(temp_dir)
         dexes = [
-            os.path.join(temp_dir, f) for f in os.listdir(temp_dir)
-            if f.endswith('.dex')
+            os.path.join(temp_dir, dex) for dex in os.listdir(temp_dir)
+            if dex.endswith('.dex')
         ]
         print("founded dexes: " + ', '.join(dexes))
         for dex in dexes:
