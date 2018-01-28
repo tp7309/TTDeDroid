@@ -27,11 +27,6 @@ _NEED_UNZIP_FILES = ['patch.jar']
 _TEST_MODE = False
 _NEED_DECOMPILE_RESOURCES = 0
 
-# unpack
-# java -jar apktool_2.3.0.jar d test.apk
-# repack
-# java -jar apktool_2.3.0.jar b test
-
 
 def sh(command):
     p = subprocess.Popen(
