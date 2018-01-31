@@ -61,7 +61,10 @@ def main(f):
         for dex in dexes:
             dest = os.path.splitext(dex)[0] + "-dex2jar.jar"
             sh("%s -f %s -o %s" % (_DEX2JAR, dex, dest))
-            jars.append(dest)
+            if not os.path.exists(dest):
+                print("\n%s decompile failed!\n"%(dest))
+            else:
+                jars.append(dest)
     elif f.endswith(".aar"):
         print("unzip %s..." % (f))
         with zipfile.ZipFile(f, 'r') as z:
@@ -71,7 +74,10 @@ def main(f):
         dest = os.path.join(temp_dir, "classes-dex2jar.jar")
         print(dest)
         sh("%s -f %s -o %s" % (_DEX2JAR, f, dest))
-        jars.append(dest)
+        if not os.path.exists(dest):
+                print("%s decompile failed!"%(dest))
+        else:
+            jars.append(dest)
     elif f.endswith(".jar"):
         jars.append(f)
     else:
