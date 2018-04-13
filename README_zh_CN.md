@@ -7,7 +7,7 @@
 
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
-> - apktool=2.3.0
+> - apktool=2.3.2
 
 # 使用要求
 需要Python环境，没有的[下载](https://www.python.org/downloads/)一个默认安装完成即可。

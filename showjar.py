@@ -20,7 +20,7 @@ if not os.name == 'nt':
     _DEX2JAR = 'sh ' + os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
                                     'd2j-dex2jar.sh')
 _JDGUI = os.path.join(_LIBS, 'jd-gui-1.4.0.jar')
-_APKTOOL = os.path.join(_LIBS, 'apktool_2.3.0.jar')
+_APKTOOL = os.path.join(_LIBS, 'apktool_2.3.2.jar')
 
 _CACHE_DIR = 'cache'
 _NEED_UNZIP_FILES = ['patch.jar']
@@ -87,8 +87,8 @@ def main(f):
     if _NEED_DECOMPILE_RESOURCES and f.endswith(
             ".apk") or f in _NEED_UNZIP_FILES:
         print("decompile resources...")
-        sh("java -jar %s d %s -o %s" % (_APKTOOL, f, _CACHE_DIR))
-        print("decompile resources done")
+        sh("java -jar %s d %s -f -o %s\\res" % (_APKTOOL, f, _CACHE_DIR))
+        print("decompile resources done, path: %s\\res" % (_CACHE_DIR))
 
     if jars and not _TEST_MODE:
         sh("java -jar %s %s" % (_JDGUI, ' '.join(jars)))
