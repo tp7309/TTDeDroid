@@ -6,6 +6,7 @@ import os
 import subprocess
 import zipfile
 import showjar
+import sys
 
 
 TEST_APK = 'test.apk'
@@ -113,6 +114,9 @@ class Test_emulator_port(unittest.TestCase):
         os.remove(apk_path)
 
     def test_enjarify(self):
+        if sys.version_info < (3, 5):
+            print("enjarify only support python3")
+            return
         apk_path = get_another_apk_path()
         shutil.copyfile(TEST_APK, apk_path)
         cache = os.path.dirname(apk_path)

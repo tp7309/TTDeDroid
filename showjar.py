@@ -13,6 +13,7 @@ import subprocess
 import zipfile
 import argparse
 import glob
+import sys
 
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -94,6 +95,11 @@ def decompile_by_enjarify(cache, args):
     if not args.file.endswith('.apk') and not args.file.endswith('.dex'):
         print("enjarify only support apk/dex file!")
         return
+
+    if sys.version_info < (3, 5):
+        print("enjarify only support python3")
+        return
+
     deres(cache, args)
     os.chdir(_ENJARIFY_DIR)
     enjarify = 'enjarify.bat' if os.name == 'nt' else 'sh enjarify.sh'
