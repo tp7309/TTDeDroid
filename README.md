@@ -5,6 +5,7 @@
 
 A tool to help quickly decompile apk, update the tools version as appropriate.
 
+> - jadx=0.7.1
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
 > - apktool=2.3.2
@@ -12,17 +13,35 @@ A tool to help quickly decompile apk, update the tools version as appropriate.
 README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/blob/master/README_zh_CN.md)
 
 # Requirements
-Python 2 (version 2.7 or later), or Python 3 (version 3.3 or later).
+Python 2 (version 2.7 or later), or Python 3 (version 3.5 or later).
 
-## Usage
+## Quick Start
 ### Windows
-drag `*.apk/*.aar/*.dex/*.jar` to `drag_here_if_windows.bat`,
-`jd-gui` will be automatically opened.
+1. add `bin` directory **adsolute path** to `PATH` system variable.
+2. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
+```
+showjar test.apk
+```
 ### Mac or Linux
 ```
-python showjar.py *.apk/*.aar/*.dex/*.jar
+python showjar.py test.apk
 ```
-if you need decompile resources, just set `_NEED_DECOMPILE_RESOURCES=1` in *showjar.py*.
 
-## TODO
-add more tools
+## Usage
+```
+usage: showjar.py [-h] [-d [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
+
+android decompile tool
+
+positional arguments:
+  file                  input file path, *.apk/*.aar/*.dex/*.jar
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d [OUTPUT], --output [OUTPUT]
+                        output directory, optional (default: None)
+  -r [RES], --res [RES]
+                        decode resources, 0:disable, 1:enable (default: 0)
+  -e [ENGINE], --engine [ENGINE]
+                        decompiler engine, [jadx, dex2jar] (default: jadx)
+```

@@ -7,6 +7,7 @@ import subprocess
 import zipfile
 import showjar
 
+
 TEST_APK = 'test.apk'
 
 
@@ -31,7 +32,6 @@ class Test_emulator_port(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(Test_emulator_port, cls).setUpClass()
-        showjar._TEST_MODE = True
 
         global cache_dir
         cache_dir = os.path.abspath(
@@ -49,17 +49,27 @@ class Test_emulator_port(unittest.TestCase):
         super(Test_emulator_port, cls).tearDownClass()
         shutil.rmtree(os.path.dirname(get_another_apk_path()), True)
 
-        showjar._TEST_MODE = False
-
     def test_apk_name(self):
-        showjar.main(TEST_APK)
+        sh("python showjar.py -e dex2jar -t 1 %s"%(TEST_APK))
         jar = os.path.join(temp_dir, 'classes-dex2jar.jar')
         self.assertTrue(os.path.exists(jar))
 
     def test_apk_another_path(self):
         apk_path = get_another_apk_path()
         shutil.copyfile(TEST_APK, apk_path)
-        showjar.main(apk_path)
+        sh("python showjar.py -e dex2jar -t 1 %s"%(apk_path))
+        unzip_cache_dir = os.path.splitext(apk_path)[0]
+        self.assertFalse(
+            os.path.exists(
+                os.path.join(unzip_cache_dir, "classes-dex2jar.jar")))
+        jar = os.path.join(temp_dir, 'classes-dex2jar.jar')
+        self.assertTrue(os.path.exists(jar))
+        os.remove(apk_path)
+
+    def test_apk_with_res_another_path(self):
+        apk_path = get_another_apk_path()
+        shutil.copyfile(TEST_APK, apk_path)
+        sh("python showjar.py -r 1 -e dex2jar -t 1 %s"%(apk_path))
         unzip_cache_dir = os.path.splitext(apk_path)[0]
         self.assertFalse(
             os.path.exists(
@@ -76,7 +86,7 @@ class Test_emulator_port(unittest.TestCase):
         shutil.copyfile(
             os.path.join(unzip_cache_dir, 'classes.dex'), 'classes.dex')
         dest_dex = 'classes.dex'
-        showjar.main(dest_dex)
+        sh("python showjar.py -e dex2jar -t 1 %s"%(dest_dex))
         self.assertFalse(
             os.path.exists(
                 os.path.join(unzip_cache_dir, "classes-dex2jar.jar")))
@@ -93,7 +103,7 @@ class Test_emulator_port(unittest.TestCase):
             z.extractall(unzip_cache_dir)
         dest_dex = os.path.abspath(
             os.path.join(unzip_cache_dir, 'classes.dex'))
-        showjar.main(dest_dex)
+        sh("python showjar.py -e dex2jar -t 1 %s"%(dest_dex))
         self.assertFalse(
             os.path.exists(
                 os.path.join(unzip_cache_dir, "classes-dex2jar.jar")))

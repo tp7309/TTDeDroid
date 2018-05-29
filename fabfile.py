@@ -3,7 +3,7 @@ from fabric.api import local
 
 def lint():
     local("flake8 .")
-    local("yapf --style pep8 -i showjar.py")
+    # local("yapf --style pep8 -i showjar.py")
 
 
 def test():

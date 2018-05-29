@@ -5,6 +5,7 @@
 
 一键反编译，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视情况更新工具版本。
 
+> - jadx=0.7.1
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
 > - apktool=2.3.2
@@ -12,15 +13,33 @@
 # 使用要求
 需要Python环境，没有的[下载](https://www.python.org/downloads/)一个默认安装完成即可。
 
-## 使用
+## 快速开始
 ### Windows
-把要查看源码的`*.apk/*.aar/*.dex/*.jar`之类文件复制到当前目录，拖拽文件到`drag_here_if_windows.bat`，一会儿便会自动打开jd-gui。
+1. 将`bin`目录的 **绝对路径** 加入`PATH`系统变量。
+2. 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+```
+showjar test.apk
+```
 ### Mac or Linux
 ```
 python showjar.py test.apk
 ```
 
-需要反编译资源的到*showjar.py*中将`_NEED_DECOMPILE_RESOURCES`值置为1即可。
+## 使用
+```
+usage: showjar.py [-h] [-d [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
 
-## TODO
-抽时间增加更多反编译工具。
+android decompile tool
+
+positional arguments:
+  file                  input file path, *.apk/*.aar/*.dex/*.jar
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d [OUTPUT], --output [OUTPUT]
+                        output directory, optional (default: None)
+  -r [RES], --res [RES]
+                        decode resources, 0:disable, 1:enable (default: 0)
+  -e [ENGINE], --engine [ENGINE]
+                        decompiler engine, [jadx, dex2jar] (default: jadx)
+```
