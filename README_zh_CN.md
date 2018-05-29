@@ -27,7 +27,7 @@ python showjar.py test.apk
 
 ## 使用
 ```
-usage: showjar.py [-h] [-d [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
+usage: showjar.py [-h] [-o [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
 
 android decompile tool
 
@@ -36,7 +36,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -d [OUTPUT], --output [OUTPUT]
+  -o [OUTPUT], --output [OUTPUT]
                         output directory, optional (default: None)
   -r [RES], --res [RES]
                         decode resources, 0:disable, 1:enable (default: 0)

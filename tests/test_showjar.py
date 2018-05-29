@@ -111,3 +111,14 @@ class Test_emulator_port(unittest.TestCase):
         self.assertTrue(os.path.exists(jar))
         shutil.rmtree(unzip_cache_dir)
         os.remove(apk_path)
+
+    def test_enjarify(self):
+        apk_path = get_another_apk_path()
+        shutil.copyfile(TEST_APK, apk_path)
+        cache = os.path.dirname(apk_path)
+        output_file = os.path.join(cache, "%s-enjarify.jar" %
+                                   (os.path.splitext(os.path.basename(apk_path))[0]))
+        sh("python showjar.py -e enjarify -o %s -t 1 %s"%(cache, apk_path))
+        self.assertTrue(os.path.exists(output_file))
+        if os.path.exists(cache):
+            shutil.rmtree(cache, True)

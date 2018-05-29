@@ -29,7 +29,7 @@ python showjar.py test.apk
 
 ## Usage
 ```
-usage: showjar.py [-h] [-d [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
+usage: showjar.py [-h] [-o [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
 
 android decompile tool
 
@@ -38,8 +38,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -d [OUTPUT], --output [OUTPUT]
-                        output directory, optional (default: None)
+  -o [OUTPUT], --output [OUTPUT]
+                        output directory, default path: TTDeDroid/cache (default: None)
   -r [RES], --res [RES]
                         decode resources, 0:disable, 1:enable (default: 0)
   -e [ENGINE], --engine [ENGINE]
