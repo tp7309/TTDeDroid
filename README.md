@@ -39,9 +39,10 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -o [OUTPUT], --output [OUTPUT]
-                        output directory, default path: TTDeDroid/cache (default: None)
+                        output directory, optional (default: None)
   -r [RES], --res [RES]
                         decode resources, 0:disable, 1:enable (default: 0)
   -e [ENGINE], --engine [ENGINE]
-                        decompiler engine, [jadx, dex2jar] (default: jadx)
+                        decompiler engine, [jadx, dex2jar, enjarify] (default:
+                        jadx)
 ```
