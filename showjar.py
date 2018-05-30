@@ -111,7 +111,7 @@ def decompile_by_enjarify(cache, args):
 
     deres(cache, args)
     os.chdir(_ENJARIFY_DIR)
-    enjarify = 'enjarify.bat' if os.name == 'nt' else 'sh enjarify.sh'
+    enjarify = 'enjarify.bat' if os.name == 'nt' else './enjarify.sh'
     make_executable(enjarify)
     output_file = os.path.join(cache, "%s-enjarify.jar" %
                                (os.path.splitext(os.path.basename(args.file))[0]))
