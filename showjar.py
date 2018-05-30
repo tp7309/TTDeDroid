@@ -21,8 +21,8 @@ _LIBS = os.path.join(_ROOT_PATH, 'libs')
 _DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
                         'd2j-dex2jar.bat')
 if not os.name == 'nt':
-    _DEX2JAR = 'sh ' + os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
-                                    'd2j-dex2jar.sh')
+    _DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
+                            'd2j-dex2jar.sh')
 _JDGUI = os.path.join(_LIBS, 'jd-gui-1.4.0.jar')
 _APKTOOL = os.path.join(_LIBS, 'apktool_2.3.2.jar')
 
@@ -36,19 +36,25 @@ _NEED_UNZIP_FILES = ['patch.jar']
 
 def newshell(command):
     if os.name == 'nt':
-        return "start cmd /c %s"%(command)
+        return "start cmd /c %s" % (command)
     else:
-        return "sh -c %s"%(command)
+        return "sh -c %s" % (command)
 
 
-def run(command):
-    print(command)
+def run(command, print_msg=True):
+    if print_msg:
+        print(command)
     subprocess.call(command, shell=True)
+
+
+def make_executable(file):
+    if not os.name == 'nt':
+        run("chmod a+x %s" % (file), print_msg=False)
 
 
 def clean_temp_error_files():
     # when dex2jar decompile error, some error file generated.
-    files = glob.glob("%s/classes?-error.zip"%(_ROOT_PATH))
+    files = glob.glob("%s/classes?-error.zip" % (_ROOT_PATH))
     for file in files:
         os.remove(file)
 
@@ -56,13 +62,16 @@ def clean_temp_error_files():
 def main():
     parser = argparse.ArgumentParser(description='android decompile tool',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-o', '--output', nargs='?', help='output directory, optional')
+    parser.add_argument('-o', '--output', nargs='?',
+                        help='output directory, optional')
     parser.add_argument('-r', '--res', nargs='?', type=int, default=0,
                         help='decode resources, 0:disable, 1:enable')
     parser.add_argument('-e', '--engine', nargs='?', default='jadx',
                         help='decompiler engine, [jadx, dex2jar, enjarify]')
-    parser.add_argument('-t', nargs='?', type=int, default=0, help=argparse.SUPPRESS)
-    parser.add_argument('file', help='input file path, *.apk/*.aar/*.dex/*.jar')
+    parser.add_argument('-t', nargs='?', type=int,
+                        default=0, help=argparse.SUPPRESS)
+    parser.add_argument(
+        'file', help='input file path, *.apk/*.aar/*.dex/*.jar')
     args = parser.parse_args()
 
     f = os.path.join(os.getcwd(), args.file)
@@ -80,7 +89,7 @@ def main():
         os.mkdir(_CACHE_DIR)
 
     cache = args.output if args.output else _CACHE_DIR
-    print("output dir: %s"%(cache))
+    print("output dir: %s" % (cache))
     if args.engine == 'jadx':
         decompile_by_jadx(cache, args)
     elif args.engine == 'enjarify':
@@ -103,10 +112,11 @@ def decompile_by_enjarify(cache, args):
     deres(cache, args)
     os.chdir(_ENJARIFY_DIR)
     enjarify = 'enjarify.bat' if os.name == 'nt' else 'sh enjarify.sh'
+    make_executable(enjarify)
     output_file = os.path.join(cache, "%s-enjarify.jar" %
                                (os.path.splitext(os.path.basename(args.file))[0]))
-    run("%s -o %s %s"%(enjarify, output_file, args.file))
-    jars = glob.glob("%s/*.jar"%(cache))
+    run("%s -o %s %s" % (enjarify, output_file, args.file))
+    jars = glob.glob("%s/*.jar" % (cache))
     if jars and not args.t == 1:
         run("java -jar %s %s" % (_JDGUI, ' '.join(jars)))
 
@@ -122,11 +132,12 @@ def decompile_by_jadx(cache, args):
             z.extractall(temp_dir)
         dest = os.path.join(temp_dir, "classes.jar")
 
+    make_executable(_JADX)
     # when use jadx-gui, '-d' option not work.
     if args.res == 1:
-        run("%s -r -j 8 %s"%(_JADX, dest))
+        run("%s -r -j 8 %s" % (_JADX, dest))
     else:
-        run("%s -j 8 %s"%(_JADX, dest))
+        run("%s -j 8 %s" % (_JADX, dest))
 
 
 def decompile_by_dex2jar(cache, args):
@@ -149,7 +160,7 @@ def decompile_by_dex2jar(cache, args):
             dest = os.path.splitext(dex)[0] + "-dex2jar.jar"
             run("%s -f %s -o %s" % (_DEX2JAR, dex, dest))
             if not os.path.exists(dest):
-                print("\n%s decompile failed!\n"%(dest))
+                print("\n%s decompile failed!\n" % (dest))
             else:
                 jars.append(dest)
     elif args.file.endswith(".aar"):
@@ -162,7 +173,7 @@ def decompile_by_dex2jar(cache, args):
         print(dest)
         run("%s -f %s -o %s" % (_DEX2JAR, args.file, dest))
         if not os.path.exists(dest):
-            print("%s decompile failed!"%(dest))
+            print("%s decompile failed!" % (dest))
         else:
             jars.append(dest)
     elif args.file.endswith(".jar"):
@@ -181,7 +192,8 @@ def deres(cache, args):
     if args.res == 1 and args.file.endswith(".apk"):
         print("decompile resources...")
         resdest = os.path.join(cache, 'res')
-        run(newshell("java -jar %s d %s -f -o %s" % (_APKTOOL, args.file, resdest)))
+        run(newshell("java -jar %s d %s -f -o %s" %
+                     (_APKTOOL, args.file, resdest)))
         print("decompile resources done, path: %s" % (resdest))
 
 
