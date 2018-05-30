@@ -6,7 +6,7 @@
 A tool to help quickly decompile apk, update the tools version as appropriate.
 
 > - jadx=0.7.1
-> - enjarify=updated at 2018-05-30
+> - Storyyeller/enjarify=updated at 2018-05-30
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
 > - apktool=2.3.2
@@ -18,7 +18,7 @@ Python 2 (version 2.7 or later), or Python 3 (version 3.5 or later).
 
 ## Quick Start
 ### Windows
-1. add `bin` directory **adsolute path** to `PATH` system variable.
+1. add `bin` directory **absolute path** to `PATH` system variable.
 2. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
 ```
 showjar test.apk
