@@ -6,6 +6,7 @@
 一键反编译，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视情况更新工具版本。
 
 > - jadx=0.7.1
+> - enjarify=updated at 2018-05-30
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
 > - apktool=2.3.2

@@ -6,6 +6,7 @@
 A tool to help quickly decompile apk, update the tools version as appropriate.
 
 > - jadx=0.7.1
+> - enjarify=updated at 2018-05-30
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
 > - apktool=2.3.2
