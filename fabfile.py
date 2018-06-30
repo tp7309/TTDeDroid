@@ -1,25 +1,31 @@
-from fabric.api import local
+from invoke import task
+import os
 
 
-def lint():
-    local("flake8 .")
-    # local("yapf --style pep8 -i showjar.py")
+@task
+def lint(c):
+    os.system("flake8 .")
+    # os.system("yapf --style pep8 -i showjar.py")
 
 
-def test():
-    local("nosetests")
+@task
+def test(c):
+    os.system("nosetests")
 
 
-def commit():
-    local("git add -A && git commit")
+@task
+def commit(c):
+    os.system("git add -A && git commit")
 
 
-def push():
-    local("git push")
+@task
+def push(c):
+    os.system("git push")
 
 
-def done():
-    lint()
-    test()
-    commit()
-    push()
+@task
+def deploy(c):
+    lint(c)
+    test(c)
+    commit(c)
+    push(c)

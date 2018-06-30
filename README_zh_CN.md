@@ -42,6 +42,6 @@ optional arguments:
   -r [RES], --res [RES]
                         decode resources, 0:disable, 1:enable (default: 0)
   -e [ENGINE], --engine [ENGINE]
-                        decompiler engine, [jadx, dex2jar, enjarify] (default:
+                        decompilation engine, [jadx, dex2jar, enjarify] (default:
                         jadx)
 ```

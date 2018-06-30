@@ -128,7 +128,7 @@ def decompile_by_jadx(cache, args):
     dest = args.file
     if dest.endswith(".aar"):
         print("unzip %s..." % (args.file))
-        with zipfile.ZipFile('r') as z:
+        with zipfile.ZipFile(args.file, 'r') as z:
             z.extractall(temp_dir)
         dest = os.path.join(temp_dir, "classes.jar")
 
