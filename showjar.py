@@ -18,16 +18,12 @@ import sys
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 _LIBS = os.path.join(_ROOT_PATH, 'libs')
-_DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
-                        'd2j-dex2jar.bat')
-if not os.name == 'nt':
-    _DEX2JAR = os.path.join(_LIBS, 'dex2jar-2.1-20171001-lanchon',
-                            'd2j-dex2jar.sh')
-_JDGUI = os.path.join(_LIBS, 'jd-gui-1.4.0.jar')
-_APKTOOL = os.path.join(_LIBS, 'apktool_2.3.2.jar')
 
-_JADX = os.path.join(_LIBS, 'jadx-0.7.1', 'bin', 'jadx-gui')
-_ENJARIFY_DIR = os.path.join(_LIBS, 'enjarify')
+DEX2JAR = os.path.join(_LIBS, 'dex2jar')
+JDGUI = os.path.join(_LIBS, 'jd-gui')
+APKTOOL = os.path.join(_LIBS, 'apktool')
+JADX = os.path.join(_LIBS, 'jadx-0.7.1', 'bin', 'jadx-gui')
+ENJARIFY = os.path.join(_LIBS, 'enjarify')
 
 _CACHE_DIR = os.path.join(_ROOT_PATH, 'cache')
 # may be robust patch file, match full path.
@@ -100,6 +96,20 @@ def main():
     print("\nDone")
 
 
+def jdguipath():
+    jars = glob.glob("%s/jd-gui*.jar"%(JDGUI))
+    if jars:
+        return jars[0]
+    return ''
+
+
+def apktoolpath():
+    jars = glob.glob("%s/apktool*.jar"%(APKTOOL))
+    if jars:
+        return jars[0]
+    return ''
+
+
 def decompile_by_enjarify(cache, args):
     if not args.file.endswith('.apk') and not args.file.endswith('.dex'):
         print("enjarify only support apk/dex file!")
@@ -110,7 +120,7 @@ def decompile_by_enjarify(cache, args):
         return
 
     deres(cache, args)
-    os.chdir(_ENJARIFY_DIR)
+    os.chdir(ENJARIFY)
     enjarify = 'enjarify.bat' if os.name == 'nt' else './enjarify.sh'
     make_executable(enjarify)
     output_file = os.path.join(cache, "%s-enjarify.jar" %
@@ -118,7 +128,7 @@ def decompile_by_enjarify(cache, args):
     run("%s -o %s %s" % (enjarify, output_file, args.file))
     jars = glob.glob("%s/*.jar" % (cache))
     if jars and not args.t == 1:
-        run("java -jar %s %s" % (_JDGUI, ' '.join(jars)))
+        run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
 
 
 def decompile_by_jadx(cache, args):
@@ -132,15 +142,18 @@ def decompile_by_jadx(cache, args):
             z.extractall(temp_dir)
         dest = os.path.join(temp_dir, "classes.jar")
 
-    make_executable(_JADX)
+    make_executable(JADX)
     # when use jadx-gui, '-d' option not work.
     if args.res == 1:
-        run("%s -r -j 8 %s" % (_JADX, dest))
+        run("%s -r -j 8 %s" % (JADX, dest))
     else:
-        run("%s -j 8 %s" % (_JADX, dest))
+        run("%s -j 8 %s" % (JADX, dest))
 
 
 def decompile_by_dex2jar(cache, args):
+    cmd = os.path.join(DEX2JAR, 'd2j-dex2jar.bat')
+    if not os.name == 'nt':
+        cmd = os.path.join(DEX2JAR, 'd2j-dex2jar.sh')
     dexes = []
     jars = []
     deres(cache, args)
@@ -158,7 +171,7 @@ def decompile_by_dex2jar(cache, args):
         print("founded dexes: " + ', '.join(dexes))
         for dex in dexes:
             dest = os.path.splitext(dex)[0] + "-dex2jar.jar"
-            run("%s -f %s -o %s" % (_DEX2JAR, dex, dest))
+            run("%s -f %s -o %s" % (cmd, dex, dest))
             if not os.path.exists(dest):
                 print("\n%s decompile failed!\n" % (dest))
             else:
@@ -171,7 +184,7 @@ def decompile_by_dex2jar(cache, args):
     elif args.file.endswith(".dex"):
         dest = os.path.join(temp_dir, "classes-dex2jar.jar")
         print(dest)
-        run("%s -f %s -o %s" % (_DEX2JAR, args.file, dest))
+        run("%s -f %s -o %s" % (cmd, args.file, dest))
         if not os.path.exists(dest):
             print("%s decompile failed!" % (dest))
         else:
@@ -183,7 +196,7 @@ def decompile_by_dex2jar(cache, args):
         return
 
     if jars and not args.t == 1:
-        run("java -jar %s %s" % (_JDGUI, ' '.join(jars)))
+        run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
     resdest = os.path.join(cache, 'res')
     print("when decompile resources done, store path: %s" % (resdest))
 
@@ -193,7 +206,7 @@ def deres(cache, args):
         print("decompile resources...")
         resdest = os.path.join(cache, 'res')
         run(newshell("java -jar %s d %s -f -o %s" %
-                     (_APKTOOL, args.file, resdest)))
+                     (apktoolpath(), args.file, resdest)))
         print("decompile resources done, path: %s" % (resdest))
 
 
