@@ -40,6 +40,21 @@ def readonly_handler(func, path, execinfo):
     func(path)
 
 
+def rmtree(path):
+    if os.path.exists(path):
+        shutil.rmtree(path, onerror=readonly_handler)
+
+
+def copy_git_repo(src, dest):
+    def app_ignore_pattern(path, names):
+        return ['build', '.git', '.gradle', '.idea', '*.idea']
+    shutil.copytree(src, dest, ignore=app_ignore_pattern)
+
+
+def lastest_tag():
+    return sh("git describe --tags --abbrev=0")
+
+
 def ensure_repo(origin_url, dirname):
     if os.path.exists(dirname):
         os.chdir(os.path.join(_SOURCE_DIR, dirname))
@@ -47,7 +62,6 @@ def ensure_repo(origin_url, dirname):
         run('git reset --hard HEAD')
         run('git pull --rebase')
     else:
-        shutil.rmtree(dirname, onerror=readonly_handler)
         run("git clone %s"%(origin_url))
         os.chdir(os.path.join(_SOURCE_DIR, dirname))
         print("changed dir to %s"%(os.getcwd()))
@@ -57,18 +71,41 @@ def dex2jar_update():
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
     ensure_repo('https://github.com/pxb1988/dex2jar.git', 'dex2jar')
-    run("git checkout %s"%(sh('git describe --abbrev=0')))
+    os.chdir(os.path.join(_SOURCE_DIR, 'dex2jar'))
+
+    # dex2jar打的"2.0"tag编译不通过，改用最新代码编译。
+    # run("git checkout %s"%(lastest_tag()))
     run('gradle clean distZip')
 
-    distzipdir = os.path.join('dex2jar', 'dex-tools', 'build', 'distributions')
+    distzipdir = os.path.join('dex-tools', 'build', 'distributions')
     distzips = glob.glob("%s/dex-tools*.zip"%(distzipdir))
     if distzips:
-        shutil.rmtree(showjar.DEX2JAR, onerror=readonly_handler)
+        rmtree(showjar.DEX2JAR)
+        rmtree(showjar.CACHE_DIR)
         with zipfile.ZipFile(distzips[0], 'r') as z:
-            z.extractall(showjar.DEX2JAR)
-        src = os.listdir(showjar.DEX2JAR)[0]
+            z.extractall(showjar.CACHE_DIR)
+        src = os.path.join(showjar.CACHE_DIR, os.listdir(showjar.CACHE_DIR)[0])
         shutil.move(src, showjar.DEX2JAR)
-        shutil.rmtree(src, onerror=readonly_handler)
+
+    os.chdir(rawdir)
+
+
+def enjarify_update():
+    rawdir = os.getcwd()
+    os.chdir(_SOURCE_DIR)
+    ensure_repo('https://github.com/Storyyeller/enjarify.git', 'enjarify')
+    os.chdir(os.path.join(_SOURCE_DIR, 'enjarify'))
+    rmtree(showjar.ENJARIFY)
+    src = os.path.join(_SOURCE_DIR, 'enjarify')
+    copy_git_repo(src, showjar.ENJARIFY)
+    # update enjarify.bat中python3为python
+    batpath = os.path.join(showjar.ENJARIFY, 'enjarify.bat')
+    content = ''
+    with open(batpath, 'r', encoding='utf-8') as f:
+        content = f.read()
+    with open(batpath, 'w', encoding='utf-8') as f:
+        content = content.replace('python3 ', 'python ')
+        f.write(content)
 
     os.chdir(rawdir)
 
@@ -76,6 +113,7 @@ def dex2jar_update():
 def main():
     ensure_dir(_SOURCE_DIR)
     dex2jar_update()
+    enjarify_update()
 
 
 if __name__ == '__main__':
