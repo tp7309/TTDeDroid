@@ -14,6 +14,7 @@ import zipfile
 import argparse
 import glob
 import sys
+import stat
 
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -22,10 +23,11 @@ _LIBS = os.path.join(_ROOT_PATH, 'libs')
 DEX2JAR = os.path.join(_LIBS, 'dex2jar')
 JDGUI = os.path.join(_LIBS, 'jd-gui')
 APKTOOL = os.path.join(_LIBS, 'apktool')
-JADX = os.path.join(_LIBS, 'jadx-0.7.1', 'bin', 'jadx-gui')
+JADX = os.path.join(_LIBS, 'jadx')
 ENJARIFY = os.path.join(_LIBS, 'enjarify')
+CFR = os.path.join(_LIBS, 'cfr')
 
-_CACHE_DIR = os.path.join(_ROOT_PATH, 'cache')
+CACHE_DIR = os.path.join(_ROOT_PATH, 'cache')
 # may be robust patch file, match full path.
 _NEED_UNZIP_FILES = ['patch.jar']
 
@@ -63,7 +65,7 @@ def main():
     parser.add_argument('-r', '--res', nargs='?', type=int, default=0,
                         help='decode resources, 0:disable, 1:enable')
     parser.add_argument('-e', '--engine', nargs='?', default='jadx',
-                        help='decompiler engine, [jadx, dex2jar, enjarify]')
+                        help='decompiler engine, [jadx, dex2jar, enjarify, cfr]')
     parser.add_argument('-t', nargs='?', type=int,
                         default=0, help=argparse.SUPPRESS)
     parser.add_argument(
@@ -79,35 +81,99 @@ def main():
         args.output = os.path.join(os.getcwd(), args.output)
     # build cache dir
     print("clearing cache...")
-    shutil.rmtree(_CACHE_DIR, ignore_errors=True)
+    rmtree(CACHE_DIR)
     print("clear cache done")
-    if not os.path.exists(_CACHE_DIR):
-        os.mkdir(_CACHE_DIR)
+    if not os.path.exists(CACHE_DIR):
+        os.mkdir(CACHE_DIR)
 
-    cache = args.output if args.output else _CACHE_DIR
+    cache = args.output if args.output else CACHE_DIR
     print("output dir: %s" % (cache))
     if args.engine == 'jadx':
         decompile_by_jadx(cache, args)
     elif args.engine == 'enjarify':
         decompile_by_enjarify(cache, args)
+    elif args.engine == 'cfr':
+        decompile_by_cfr(cache, args)
     else:
         decompile_by_dex2jar(cache, args)
     clean_temp_error_files()
     print("\nDone")
 
 
-def jdguipath():
-    jars = glob.glob("%s/jd-gui*.jar"%(JDGUI))
+def readonly_handler(func, path, execinfo):
+    # or os.chmod(path, stat.S_IWRITE) from "stat" module
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
+
+
+def rmtree(path):
+    if os.path.exists(path):
+        shutil.rmtree(path, onerror=readonly_handler)
+
+
+def openfile(path):
+    if os.name == 'nt':
+        run("start %s"%(path))
+    else:
+        run("open %s"%(path))
+
+
+def findjar(dirpath, rejar):
+    jars = glob.glob("%s/%s"%(dirpath, rejar))
     if jars:
         return jars[0]
     return ''
+
+
+def jdguipath():
+    return findjar(JDGUI, 'jd-gui*.jar')
 
 
 def apktoolpath():
-    jars = glob.glob("%s/apktool*.jar"%(APKTOOL))
-    if jars:
-        return jars[0]
-    return ''
+    return findjar(APKTOOL, 'apktool*.jar')
+
+
+def jadxpath():
+    if os.name == 'nt':
+        return os.path.join(JADX, 'bin', 'jadx-gui.bat')
+    else:
+        return os.path.join(JADX, 'bin', 'jadx-gui')
+
+
+def cfrpath():
+    return findjar(CFR, 'cfr*.jar')
+
+
+def extractjar(path):
+    if path.endswith('.jar'):
+        return path
+    elif path.endswith('aar'):
+        rmtree(CACHE_DIR)
+        temp_dir = CACHE_DIR
+        print("unzip %s..." % (path))
+        with zipfile.ZipFile(path, 'r') as z:
+            z.extractall(temp_dir)
+        dest = os.path.join(temp_dir, "classes.jar")
+        if os.path.exists(dest):
+            return dest
+        return ''
+    else:
+        return ''
+
+
+def decompile_by_cfr(cache, args):
+    jar = extractjar(args.file)
+    if not jar:
+        print("unsupport decompile %s"%(args.file))
+        return
+    name = os.path.splitext(os.path.basename(args.file))[0]
+    cache_path = os.path.join(cache, name)
+
+    print('clear cache...')
+    rmtree(cache_path)
+    run("java -jar %s %s --outputdir %s"%(cfrpath(), jar, cache_path))
+    if args.t == 0:
+        openfile(cache_path)
 
 
 def decompile_by_enjarify(cache, args):
@@ -127,7 +193,7 @@ def decompile_by_enjarify(cache, args):
                                (os.path.splitext(os.path.basename(args.file))[0]))
     run("%s -o %s %s" % (enjarify, output_file, args.file))
     jars = glob.glob("%s/*.jar" % (cache))
-    if jars and not args.t == 1:
+    if jars and args.t == 0:
         run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
 
 
@@ -142,12 +208,12 @@ def decompile_by_jadx(cache, args):
             z.extractall(temp_dir)
         dest = os.path.join(temp_dir, "classes.jar")
 
-    make_executable(JADX)
+    make_executable(jadxpath())
     # when use jadx-gui, '-d' option not work.
     if args.res == 1:
-        run("%s -r -j 8 %s" % (JADX, dest))
+        run("%s -r -j 8 %s" % (jadxpath(), dest))
     else:
-        run("%s -j 8 %s" % (JADX, dest))
+        run("%s -j 8 %s" % (jadxpath(), dest))
 
 
 def decompile_by_dex2jar(cache, args):
