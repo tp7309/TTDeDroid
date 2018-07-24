@@ -115,13 +115,13 @@ def rmtree(path):
 
 def openfile(path):
     if os.name == 'nt':
-        run("start %s"%(path))
+        run("start %s" % (path))
     else:
-        run("open %s"%(path))
+        run("open %s" % (path))
 
 
 def findjar(dirpath, rejar):
-    jars = glob.glob("%s/%s"%(dirpath, rejar))
+    jars = glob.glob("%s/%s" % (dirpath, rejar))
     if jars:
         return jars[0]
     return ''
@@ -150,13 +150,14 @@ def decompile_by_cfr(cache, args):
     print('use dex2jar to extract jars...')
     jars = dex2jar(cache, args)
     if not jars:
-        print("unsupport decompile %s"%(args.file))
+        print("unsupport decompile %s" % (args.file))
         return
     name = os.path.splitext(os.path.basename(args.file))[0]
     cache_path = os.path.join(cache, name)
 
     for jar in jars:
-        run("java -Xms256m -Xmx1024m -jar %s %s --outputdir %s"%(cfrpath(), jar, cache_path))
+        run("java -Xms256m -Xmx1024m -jar %s %s --outputdir %s" %
+            (cfrpath(), jar, cache_path))
     if args.t == 0:
         openfile(cache_path)
 
@@ -205,6 +206,7 @@ def dex2jar(cache, args):
     cmd = os.path.join(DEX2JAR, 'd2j-dex2jar.bat')
     if not os.name == 'nt':
         cmd = os.path.join(DEX2JAR, 'd2j-dex2jar.sh')
+        run("chmod a+x %s" % (cmd))
     dexes = []
     jars = []
     deres(cache, args)
