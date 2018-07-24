@@ -1,0 +1,4 @@
+Summary for G:\Android\TTDeDroid\tests\test_cache\test\classes-dex2jar.jar
+Decompiled with CFR 0_132
+
+Classes with case insensitive name clashes seen, and your FS appears to be case insensitive - consider using --caseinsensitivefs true

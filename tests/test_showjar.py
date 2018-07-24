@@ -7,6 +7,7 @@ import subprocess
 import zipfile
 import showjar
 import sys
+import fnmatch
 
 
 TEST_APK = 'test.apk'
@@ -27,6 +28,14 @@ def get_another_apk_path():
     if not os.path.exists(test_cache):
         os.makedirs(test_cache)
     return os.path.join(test_cache, TEST_APK)
+
+
+def find_files(directory, pattern):
+    for root, dirs, files in os.walk(directory):
+        for basename in files:
+            if fnmatch.fnmatch(basename, pattern):
+                filename = os.path.join(root, basename)
+                yield filename
 
 
 class Test_emulator_port(unittest.TestCase):
@@ -59,10 +68,11 @@ class Test_emulator_port(unittest.TestCase):
         apk_path = get_another_apk_path()
         shutil.copyfile(TEST_APK, apk_path)
         sh("python showjar.py -e dex2jar -t 1 %s"%(apk_path))
-        unzipCACHE_DIR = os.path.splitext(apk_path)[0]
+        print(apk_path)
+        unzip_cache_dir = os.path.splitext(apk_path)[0]
         self.assertFalse(
             os.path.exists(
-                os.path.join(unzipCACHE_DIR, "classes-dex2jar.jar")))
+                os.path.join(unzip_cache_dir, "classes-dex2jar.jar")))
         jar = os.path.join(temp_dir, 'classes-dex2jar.jar')
         self.assertTrue(os.path.exists(jar))
         os.remove(apk_path)
@@ -71,46 +81,43 @@ class Test_emulator_port(unittest.TestCase):
         apk_path = get_another_apk_path()
         shutil.copyfile(TEST_APK, apk_path)
         sh("python showjar.py -r 1 -e dex2jar -t 1 %s"%(apk_path))
-        unzipCACHE_DIR = os.path.splitext(apk_path)[0]
+        unzip_cache_dir = os.path.splitext(apk_path)[0]
         self.assertFalse(
             os.path.exists(
-                os.path.join(unzipCACHE_DIR, "classes-dex2jar.jar")))
+                os.path.join(unzip_cache_dir, "classes-dex2jar.jar")))
         jar = os.path.join(temp_dir, 'classes-dex2jar.jar')
         self.assertTrue(os.path.exists(jar))
         os.remove(apk_path)
 
     def test_dex_name(self):
         apk_path = TEST_APK
-        unzipCACHE_DIR = os.path.splitext(apk_path)[0]
+        unzip_cache_dir = os.path.splitext(apk_path)[0]
         with zipfile.ZipFile(apk_path, 'r') as z:
-            z.extractall(unzipCACHE_DIR)
+            z.extractall(unzip_cache_dir,)
         shutil.copyfile(
-            os.path.join(unzipCACHE_DIR, 'classes.dex'), 'classes.dex')
+            os.path.join(unzip_cache_dir, 'classes.dex'), 'classes.dex')
         dest_dex = 'classes.dex'
         sh("python showjar.py -e dex2jar -t 1 %s"%(dest_dex))
         self.assertFalse(
             os.path.exists(
-                os.path.join(unzipCACHE_DIR, "classes-dex2jar.jar")))
+                os.path.join(unzip_cache_dir, "classes-dex2jar.jar")))
         jar = os.path.join(cache_dir, 'classes', 'classes-dex2jar.jar')
         self.assertTrue(os.path.exists(jar))
-        shutil.rmtree(unzipCACHE_DIR)
+        shutil.rmtree(unzip_cache_dir,)
         os.remove('classes.dex')
 
     def test_dex_another_path(self):
         apk_path = get_another_apk_path()
         shutil.copyfile(TEST_APK, apk_path)
-        unzipCACHE_DIR = os.path.splitext(apk_path)[0]
+        unzip_cache_dir = os.path.splitext(apk_path)[0]
         with zipfile.ZipFile(apk_path, 'r') as z:
-            z.extractall(unzipCACHE_DIR)
+            z.extractall(unzip_cache_dir)
         dest_dex = os.path.abspath(
-            os.path.join(unzipCACHE_DIR, 'classes.dex'))
+            os.path.join(unzip_cache_dir, 'classes.dex'))
         sh("python showjar.py -e dex2jar -t 1 %s"%(dest_dex))
-        self.assertFalse(
-            os.path.exists(
-                os.path.join(unzipCACHE_DIR, "classes-dex2jar.jar")))
         jar = os.path.join(cache_dir, 'classes', 'classes-dex2jar.jar')
         self.assertTrue(os.path.exists(jar))
-        shutil.rmtree(unzipCACHE_DIR)
+        shutil.rmtree(unzip_cache_dir)
         os.remove(apk_path)
 
     def test_enjarify(self):
@@ -124,5 +131,17 @@ class Test_emulator_port(unittest.TestCase):
                                    (os.path.splitext(os.path.basename(apk_path))[0]))
         sh("python showjar.py -e enjarify -o %s -t 1 %s"%(cache, apk_path))
         self.assertTrue(os.path.exists(output_file))
+        if os.path.exists(cache):
+            shutil.rmtree(cache, True)
+
+    def test_cfr(self):
+        apk_path = get_another_apk_path()
+        shutil.copyfile(TEST_APK, apk_path)
+        cache = os.path.dirname(apk_path)
+        outputdir = os.path.join(cache, os.path.splitext(os.path.basename(apk_path))[0])
+        sh("python showjar.py -e cfr -o %s -t 1 %s"%(cache, apk_path))
+        for f in find_files(outputdir, "*.java"):
+            self.assertTrue(f)
+            break
         if os.path.exists(cache):
             shutil.rmtree(cache, True)

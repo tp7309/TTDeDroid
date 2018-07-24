@@ -79,14 +79,16 @@ def main():
     args.file = f
     if args.output:
         args.output = os.path.join(os.getcwd(), args.output)
-    # build cache dir
-    print("clearing cache...")
-    rmtree(CACHE_DIR)
-    print("clear cache done")
+    cache = args.output if args.output else CACHE_DIR
+
+    # rebuild cache dir
+    if os.path.abspath(cache) == os.path.abspath(CACHE_DIR):
+        print("clearing cache...")
+        rmtree(CACHE_DIR)
+        print("clear cache done")
     if not os.path.exists(CACHE_DIR):
         os.mkdir(CACHE_DIR)
 
-    cache = args.output if args.output else CACHE_DIR
     print("output dir: %s" % (cache))
     if args.engine == 'jadx':
         decompile_by_jadx(cache, args)
@@ -144,34 +146,17 @@ def cfrpath():
     return findjar(CFR, 'cfr*.jar')
 
 
-def extractjar(path):
-    if path.endswith('.jar'):
-        return path
-    elif path.endswith('aar'):
-        rmtree(CACHE_DIR)
-        temp_dir = CACHE_DIR
-        print("unzip %s..." % (path))
-        with zipfile.ZipFile(path, 'r') as z:
-            z.extractall(temp_dir)
-        dest = os.path.join(temp_dir, "classes.jar")
-        if os.path.exists(dest):
-            return dest
-        return ''
-    else:
-        return ''
-
-
 def decompile_by_cfr(cache, args):
-    jar = extractjar(args.file)
-    if not jar:
+    print('use dex2jar to extract jars...')
+    jars = dex2jar(cache, args)
+    if not jars:
         print("unsupport decompile %s"%(args.file))
         return
     name = os.path.splitext(os.path.basename(args.file))[0]
     cache_path = os.path.join(cache, name)
 
-    print('clear cache...')
-    rmtree(cache_path)
-    run("java -jar %s %s --outputdir %s"%(cfrpath(), jar, cache_path))
+    for jar in jars:
+        run("java -Xms256m -Xmx1024m -jar %s %s --outputdir %s"%(cfrpath(), jar, cache_path))
     if args.t == 0:
         openfile(cache_path)
 
@@ -211,12 +196,12 @@ def decompile_by_jadx(cache, args):
     make_executable(jadxpath())
     # when use jadx-gui, '-d' option not work.
     if args.res == 1:
-        run("%s -r -j 8 %s" % (jadxpath(), dest))
+        run("%s -r -j 8 --deobf %s" % (jadxpath(), dest))
     else:
-        run("%s -j 8 %s" % (jadxpath(), dest))
+        run("%s -j 8 --deobf %s" % (jadxpath(), dest))
 
 
-def decompile_by_dex2jar(cache, args):
+def dex2jar(cache, args):
     cmd = os.path.join(DEX2JAR, 'd2j-dex2jar.bat')
     if not os.name == 'nt':
         cmd = os.path.join(DEX2JAR, 'd2j-dex2jar.sh')
@@ -259,12 +244,16 @@ def decompile_by_dex2jar(cache, args):
         jars.append(args.file)
     else:
         print("error file extension!")
-        return
 
-    if jars and not args.t == 1:
-        run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
     resdest = os.path.join(cache, 'res')
     print("when decompile resources done, store path: %s" % (resdest))
+    return jars
+
+
+def decompile_by_dex2jar(cache, args):
+    jars = dex2jar(cache, args)
+    if jars and not args.t == 1:
+        run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
 
 
 def deres(cache, args):
