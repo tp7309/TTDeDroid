@@ -5,11 +5,13 @@
 
 A tool to help quickly decompile apk, update the tools version as appropriate.
 
+> - update at 2018-07-24
+
 > - jadx=0.7.1
-> - Storyyeller/enjarify=updated at 2018-05-30
+> - Storyyeller/enjarify
 > - dex2jar=2.1 by DexPatcher
 > - jdgui=1.4.0
-> - apktool=2.3.2
+> - apktool=2.3.3
 
 README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/blob/master/README_zh_CN.md)
 
