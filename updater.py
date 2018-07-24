@@ -55,6 +55,10 @@ def lastest_tag():
     return sh("git describe --tags --abbrev=0")
 
 
+def gradle_path():
+    return 'gradlew' if os.name == 'nt' else './gradlew'
+
+
 def ensure_repo(origin_url, dirname):
     if os.path.exists(dirname):
         os.chdir(os.path.join(_SOURCE_DIR, dirname))
@@ -75,7 +79,7 @@ def dex2jar_update():
 
     # dex2jar打的"2.0"tag编译不通过，改用最新代码编译。
     # run("git checkout %s"%(lastest_tag()))
-    run('gradle clean distZip')
+    run("%s clean distZip"%(gradle_path()))
 
     distzipdir = os.path.join('dex-tools', 'build', 'distributions')
     distzips = glob.glob("%s/dex-tools*.zip"%(distzipdir))
