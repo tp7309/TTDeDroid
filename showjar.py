@@ -197,9 +197,9 @@ def decompile_by_jadx(cache, args):
     make_executable(jadxpath())
     # when use jadx-gui, '-d' option not work.
     if args.res == 1:
-        run("%s -r -j 8 --deobf %s" % (jadxpath(), dest))
+        run("%s -r -j 8 %s" % (jadxpath(), dest))
     else:
-        run("%s -j 8 --deobf %s" % (jadxpath(), dest))
+        run("%s -j 8 %s" % (jadxpath(), dest))
 
 
 def dex2jar(cache, args):
