@@ -15,6 +15,7 @@ import argparse
 import glob
 import sys
 import stat
+import fnmatch
 
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -120,6 +121,16 @@ def openfile(path):
         run("open %s" % (path))
 
 
+def find_files(directory, pattern):
+    filenames = []
+    for root, dirs, files in os.walk(directory):
+        for basename in files:
+            if fnmatch.fnmatch(basename, pattern):
+                filename = os.path.join(root, basename)
+                filenames.append(filename)
+    return filenames
+
+
 def findjar(dirpath, rejar):
     jars = glob.glob("%s/%s" % (dirpath, rejar))
     if jars:
@@ -184,22 +195,14 @@ def decompile_by_enjarify(cache, args):
 
 
 def decompile_by_jadx(cache, args):
-    temp_dir = os.path.abspath(os.path.join(
-        cache, os.path.splitext(os.path.basename(args.file))[0]))
-    # jadx has bug when pass .aar file, temp solution.
-    dest = args.file
-    if dest.endswith(".aar"):
-        print("unzip %s..." % (args.file))
-        with zipfile.ZipFile(args.file, 'r') as z:
-            z.extractall(temp_dir)
-        dest = os.path.join(temp_dir, "classes.jar")
-
+    # jadx has bug when pass .aar file.
+    jars = dex2jar(cache, args)
     make_executable(jadxpath())
-    # when use jadx-gui, '-d' option not work.
-    if args.res == 1:
-        run("%s -r -j 8 %s" % (jadxpath(), dest))
-    else:
-        run("%s -j 8 %s" % (jadxpath(), dest))
+    for jar in jars:
+        if args.res == 1:
+            run("%s -r -j 8 %s" % (jadxpath(), jar))
+        else:
+            run("%s -j 8 %s" % (jadxpath(), jar))
 
 
 def dex2jar(cache, args):
@@ -233,7 +236,8 @@ def dex2jar(cache, args):
         print("unzip %s..." % (args.file))
         with zipfile.ZipFile(args.file, 'r') as z:
             z.extractall(temp_dir)
-        jars.append(os.path.join(temp_dir, "classes.jar"))
+        # maybe has ''libs' directory
+        jars.extend(find_files(temp_dir, "*.jar"))
     elif args.file.endswith(".dex"):
         dest = os.path.join(temp_dir, "classes-dex2jar.jar")
         print(dest)
