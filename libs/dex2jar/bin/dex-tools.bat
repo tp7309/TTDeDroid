@@ -8,13 +8,13 @@
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 
-@rem Add default JVM options here. You can also use JAVA_OPTS and DEX_TOOLS_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS=
-
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%..
+
+@rem Add default JVM options here. You can also use JAVA_OPTS and DEX_TOOLS_OPTS to pass JVM options to this script.
+set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -46,10 +46,9 @@ echo location of your Java installation.
 goto fail
 
 :init
-@rem Get command-line arguments, handling Windowz variants
+@rem Get command-line arguments, handling Windows variants
 
 if not "%OS%" == "Windows_NT" goto win9xME_args
-if "%@eval[2+2]" == "4" goto 4NT_args
 
 :win9xME_args
 @rem Slurp the command line arguments.
@@ -60,16 +59,11 @@ set _SKIP=2
 if "x%~1" == "x" goto execute
 
 set CMD_LINE_ARGS=%*
-goto execute
-
-:4NT_args
-@rem Get arguments from the 4NT Shell from JP Software
-set CMD_LINE_ARGS=%$
 
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\dex-tools-2.1-20171001-lanchon.jar;%APP_HOME%\lib\dex-translator-2.1-20171001-lanchon.jar;%APP_HOME%\lib\d2j-smali-2.1-20171001-lanchon.jar;%APP_HOME%\lib\d2j-jasmin-2.1-20171001-lanchon.jar;%APP_HOME%\lib\dex-writer-2.1-20171001-lanchon.jar;%APP_HOME%\lib\d2j-base-cmd-2.1-20171001-lanchon.jar;%APP_HOME%\lib\dx-23.0.0.jar;%APP_HOME%\lib\dex-reader-2.1-20171001-lanchon.jar;%APP_HOME%\lib\dex-ir-2.1-20171001-lanchon.jar;%APP_HOME%\lib\asm-debug-all-5.0.3.jar;%APP_HOME%\lib\antlr4-4.5.jar;%APP_HOME%\lib\antlr4-runtime-4.5.jar;%APP_HOME%\lib\antlr-3.5.2.jar;%APP_HOME%\lib\antlr-runtime-3.5.2.jar;%APP_HOME%\lib\dex-reader-api-2.1-20171001-lanchon.jar;%APP_HOME%\lib\ST4-4.0.8.jar;%APP_HOME%\lib\org.abego.treelayout.core-1.0.1.jar
+set CLASSPATH=%APP_HOME%\lib\ST4-4.0.8.jar;%APP_HOME%\lib\org.abego.treelayout.core-1.0.1.jar;%APP_HOME%\lib\antlr4-runtime-4.5.jar;%APP_HOME%\lib\dx-27.0.3.jar;%APP_HOME%\lib\d2j-smali-2.1-SNAPSHOT.jar;%APP_HOME%\lib\dex-writer-2.1-SNAPSHOT.jar;%APP_HOME%\lib\antlr-runtime-3.5.2.jar;%APP_HOME%\lib\asm-debug-all-5.0.3.jar;%APP_HOME%\lib\dex-translator-2.1-SNAPSHOT.jar;%APP_HOME%\lib\dex-reader-2.1-SNAPSHOT.jar;%APP_HOME%\lib\dex-reader-api-2.1-SNAPSHOT.jar;%APP_HOME%\lib\antlr4-4.5.jar;%APP_HOME%\lib\dex-tools-2.1-SNAPSHOT.jar;%APP_HOME%\lib\d2j-jasmin-2.1-SNAPSHOT.jar;%APP_HOME%\lib\dex-ir-2.1-SNAPSHOT.jar;%APP_HOME%\lib\d2j-base-cmd-2.1-SNAPSHOT.jar;%APP_HOME%\lib\antlr-3.5.2.jar
 
 @rem Execute dex-tools
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %DEX_TOOLS_OPTS%  -classpath "%CLASSPATH%" com.googlecode.dex2jar.tools.BaseCmd %CMD_LINE_ARGS%

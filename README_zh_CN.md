@@ -7,11 +7,12 @@
 
 > - update at 2018-07-24
 
-> - jadx=0.7.1
+> - jadx=0.8.0
 > - Storyyeller/enjarify
-> - dex2jar=2.1 by DexPatcher
+> - dex2jar=2.1
 > - jdgui=1.4.0
-> - apktool=2.3.3
+> - apktool=2.3.4
+> - cfr
 
 # 使用要求
 需要Python环境，没有的[下载](https://www.python.org/downloads/)一个默认安装完成即可。

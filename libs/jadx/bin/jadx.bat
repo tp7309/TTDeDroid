@@ -14,7 +14,7 @@ set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%..
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and JADX_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="-Xms2g" "-Xmx4g"
+set DEFAULT_JVM_OPTS="-Xms128M" "-Xmx4g"
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -63,7 +63,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\jadx-cli-0.7.1.jar;%APP_HOME%\lib\jadx-core-0.7.1.jar;%APP_HOME%\lib\dx-1.14.jar;%APP_HOME%\lib\android-5.1.jar;%APP_HOME%\lib\logback-classic-1.2.3.jar;%APP_HOME%\lib\slf4j-api-1.7.25.jar;%APP_HOME%\lib\jcommander-1.72.jar;%APP_HOME%\lib\commons-io-2.6.jar;%APP_HOME%\lib\asm-6.0.jar;%APP_HOME%\lib\annotations-15.0.jar;%APP_HOME%\lib\cloning-1.9.9.jar;%APP_HOME%\lib\logback-core-1.2.3.jar;%APP_HOME%\lib\objenesis-2.6.jar
+set CLASSPATH=%APP_HOME%\lib\jadx-cli-0.8.0.jar;%APP_HOME%\lib\jadx-core-0.8.0.jar;%APP_HOME%\lib\dx-1.14.jar;%APP_HOME%\lib\android-5.1.jar;%APP_HOME%\lib\logback-classic-1.2.3.jar;%APP_HOME%\lib\slf4j-api-1.7.25.jar;%APP_HOME%\lib\jcommander-1.74.jar;%APP_HOME%\lib\commons-io-2.6.jar;%APP_HOME%\lib\asm-6.2.jar;%APP_HOME%\lib\annotations-16.0.2.jar;%APP_HOME%\lib\cloning-1.9.10.jar;%APP_HOME%\lib\logback-core-1.2.3.jar;%APP_HOME%\lib\objenesis-2.6.jar
 
 @rem Execute jadx
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %JADX_OPTS%  -classpath "%CLASSPATH%" jadx.cli.JadxCLI %CMD_LINE_ARGS%

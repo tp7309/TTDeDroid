@@ -8,6 +8,7 @@ import stat
 import os
 import glob
 import zipfile
+import webbrowser
 import showjar
 
 
@@ -77,8 +78,7 @@ def dex2jar_update():
     ensure_repo('https://github.com/pxb1988/dex2jar.git', 'dex2jar')
     os.chdir(os.path.join(_SOURCE_DIR, 'dex2jar'))
 
-    # dex2jar打的"2.0"tag编译不通过，改用最新代码编译。
-    # run("git checkout %s"%(lastest_tag()))
+    run("git checkout 2.x")
     run("%s clean distZip"%(gradle_path()))
 
     distzipdir = os.path.join('dex-tools', 'build', 'distributions')
@@ -102,7 +102,7 @@ def enjarify_update():
     rmtree(showjar.ENJARIFY)
     src = os.path.join(_SOURCE_DIR, 'enjarify')
     copy_git_repo(src, showjar.ENJARIFY)
-    # update enjarify.bat中python3为python
+    # 升级enjarify.bat中python3为python
     batpath = os.path.join(showjar.ENJARIFY, 'enjarify.bat')
     content = ''
     with open(batpath, 'r', encoding='utf-8') as f:
@@ -114,10 +114,30 @@ def enjarify_update():
     os.chdir(rawdir)
 
 
+def jadx_update():
+    webbrowser.open_new_tab("https://github.com/skylot/jadx/releases")
+
+
+def jdgui_update():
+    webbrowser.open_new_tab("https://github.com/java-decompiler/jd-gui/releases")
+
+
+def apktool_update():
+    webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
+
+
+def cfr_update():
+    webbrowser.open_new_tab("http://www.benf.org/other/cfr/")
+
+
 def main():
     ensure_dir(_SOURCE_DIR)
-    dex2jar_update()
     enjarify_update()
+    dex2jar_update()
+    jadx_update()
+    jdgui_update()
+    apktool_update()
+    cfr_update()
 
 
 if __name__ == '__main__':
