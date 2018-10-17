@@ -196,13 +196,16 @@ def decompile_by_enjarify(cache, args):
 
 def decompile_by_jadx(cache, args):
     # jadx has bug when pass .aar file.
-    jars = dex2jar(cache, args)
+    if args.file.endswith('.apk'):
+        inputs = [args.file]
+    else:
+        inputs = dex2jar(cache, args)
     make_executable(jadxpath())
-    for jar in jars:
+    for file in inputs:
         if args.res == 1:
-            run("%s -r -j 8 %s" % (jadxpath(), jar))
+            run("%s -r -j 8 %s" % (jadxpath(), file))
         else:
-            run("%s -j 8 %s" % (jadxpath(), jar))
+            run("%s -j 8 %s" % (jadxpath(), file))
 
 
 def dex2jar(cache, args):
