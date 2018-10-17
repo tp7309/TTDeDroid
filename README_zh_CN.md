@@ -5,11 +5,11 @@
 
 一键反编译，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视情况更新工具版本。
 
-> - update at 2018-07-24
+> - update at 2018-10-17
 
 > - jadx=0.8.0
-> - Storyyeller/enjarify
-> - dex2jar=2.1
+> - Storyyeller/enjarify(build by source)
+> - dex2jar(build by source)
 > - jdgui=1.4.0
 > - apktool=2.3.4
 > - cfr

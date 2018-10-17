@@ -5,11 +5,11 @@
 
 A tool to help quickly decompile apk, update the tools version as appropriate.
 
-> - update at 2018-07-24
+> - update at 2018-10-17
 
 > - jadx=0.8.0
-> - Storyyeller/enjarify
-> - dex2jar=2.1
+> - Storyyeller/enjarify(build by source)
+> - dex2jar(build by source)
 > - jdgui=1.4.0
 > - apktool=2.3.4
 > - cfr
