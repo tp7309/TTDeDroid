@@ -16,6 +16,7 @@ import glob
 import sys
 import stat
 import fnmatch
+import re
 
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -40,6 +41,15 @@ def newshell(command):
         return "sh -c %s" % (command)
 
 
+def sh(command, print_msg=True):
+    p = subprocess.Popen(
+        command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    result = p.stdout.read().decode('utf-8')
+    if print_msg:
+        print(result)
+    return result
+
+
 def run(command, print_msg=True):
     if print_msg:
         print(command)
@@ -58,6 +68,19 @@ def clean_temp_error_files():
         os.remove(file)
 
 
+# clean strange file name
+def clean_filename(cache, path):
+    name = os.path.basename(path)
+    pattern = re.compile(u"[-\.\(\)\w]+")
+    name2 = '_'.join(re.findall(pattern, name))
+    if name != name2:
+        newname = "ttdedroid_%s"%(name2)
+        newpath = os.path.join(cache, newname)
+        shutil.copyfile(path, newpath)
+        return newpath
+    return path
+
+
 def main():
     parser = argparse.ArgumentParser(description='android decompile tool',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -73,11 +96,6 @@ def main():
         'file', help='input file path, *.apk/*.aar/*.dex/*.jar')
     args = parser.parse_args()
 
-    f = os.path.join(os.getcwd(), args.file)
-    # fix windows path
-    if ":\\" in f and ":\\\\" not in f:
-        f = f.replace("\\", "\\\\")
-    args.file = f
     if args.output:
         args.output = os.path.join(os.getcwd(), args.output)
     cache = args.output if args.output else CACHE_DIR
@@ -89,6 +107,13 @@ def main():
         print("clear cache done")
     if not os.path.exists(CACHE_DIR):
         os.mkdir(CACHE_DIR)
+
+    f = os.path.join(os.getcwd(), args.file)
+    f = clean_filename(cache, f)
+    # fix windows path
+    if ":\\" in f and ":\\\\" not in f:
+        f = f.replace("\\", "\\\\")
+    args.file = f
 
     print("output dir: %s" % (cache))
     if args.engine == 'jadx':
@@ -115,6 +140,11 @@ def rmtree(path):
 
 
 def openfile(path):
+    # open with vscode by default
+    if 'not' not in sh("code -v", print_msg=False):
+        run("code \"%s\""%(path))
+        return
+
     if os.name == 'nt':
         run("start %s" % (path))
     else:
