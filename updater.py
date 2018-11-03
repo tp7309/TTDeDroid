@@ -1,5 +1,5 @@
 #!/usr/bin python3
-# 自动更新Libs
+# library update helper
 
 import subprocess
 import shutil
@@ -72,7 +72,7 @@ def ensure_repo(origin_url, dirname):
         print("changed dir to %s"%(os.getcwd()))
 
 
-def dex2jar_update():
+def dex2jar_updater():
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
     ensure_repo('https://github.com/pxb1988/dex2jar.git', 'dex2jar')
@@ -94,7 +94,7 @@ def dex2jar_update():
     os.chdir(rawdir)
 
 
-def enjarify_update():
+def enjarify_updater():
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
     ensure_repo('https://github.com/Storyyeller/enjarify.git', 'enjarify')
@@ -114,30 +114,30 @@ def enjarify_update():
     os.chdir(rawdir)
 
 
-def jadx_update():
+def jadx_updater():
     webbrowser.open_new_tab("https://github.com/skylot/jadx/releases")
 
 
-def jdgui_update():
+def jdgui_updater():
     webbrowser.open_new_tab("https://github.com/java-decompiler/jd-gui/releases")
 
 
-def apktool_update():
+def apktool_updater():
     webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
 
 
-def cfr_update():
+def cfr_updater():
     webbrowser.open_new_tab("http://www.benf.org/other/cfr/")
 
 
 def main():
     ensure_dir(_SOURCE_DIR)
-    enjarify_update()
-    dex2jar_update()
-    jadx_update()
-    jdgui_update()
-    apktool_update()
-    cfr_update()
+    enjarify_updater()
+    dex2jar_updater()
+    jadx_updater()
+    jdgui_updater()
+    apktool_updater()
+    cfr_updater()
 
 
 if __name__ == '__main__':
