@@ -105,8 +105,8 @@ def main():
         print("clearing cache...")
         rmtree(CACHE_DIR)
         print("clear cache done")
-    if not os.path.exists(CACHE_DIR):
-        os.mkdir(CACHE_DIR)
+    if not os.path.exists(cache):
+        os.mkdir(cache)
 
     f = os.path.join(os.getcwd(), args.file)
     f = clean_filename(cache, f)
