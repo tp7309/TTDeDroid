@@ -1,6 +1,9 @@
 # TTDeDroid
+
 [![Build Status](https://travis-ci.org/tp7309/TTDeDroid.svg?branch=master)](https://travis-ci.org/tp7309/TTDeDroid)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2778d8960e094469bc7d4b04d28eb059)](https://www.codacy.com/app/tp7309/TTDeDroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tp7309/TTDeDroid&amp;utm_campaign=Badge_Grade)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2778d8960e094469bc7d4b04d28eb059)](https://www.codacy.com/app/tp7309/TTDeDroid?utm_source=github.com&utm_medium=referral&utm_content=tp7309/TTDeDroid&utm_campaign=Badge_Grade)
+
 <!-- [![Coverage Status](https://coveralls.io/repos/github/tp7309/TTDeDroid/badge.svg?branch=master)](https://coveralls.io/github/tp7309/TTDeDroid?branch=master) -->
 
 一键反编译 **apk/aar/dex/jar**，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视反编译库的更新情况更新工具版本。
@@ -15,36 +18,43 @@
 > - cfr
 
 # 使用要求
-需要Python环境，没有的[下载](https://www.python.org/downloads/)一个默认安装完成即可。
+
+需要 Python 环境，没有的[下载](https://www.python.org/downloads/)一个默认安装完成即可。
 
 ## 快速开始
+
 ### Windows
+
 1. 将`bin`目录的 **绝对路径** 加入`PATH`系统变量。
 2. 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+
 ```
 showjar test.apk
 ```
+
 ### Mac or Linux
+
 ```
 python showjar.py test.apk
 ```
 
 ## 使用
+
 ```
 usage: showjar.py [-h] [-o [OUTPUT]] [-r [RES]] [-e [ENGINE]] file
 
-android decompile tool
+Android一键反编译工具
 
-positional arguments:
-  file                  input file path, *.apk/*.aar/*.dex/*.jar
+必选参数:
+  file                  输出文件路径, *.apk/*.aar/*.dex/*.jar
 
-optional arguments:
-  -h, --help            show this help message and exit
+可选参数:
+  -h, --help            显示帮助信息
   -o [OUTPUT], --output [OUTPUT]
-                        output directory, optional (default: None)
+                        反编译文件输出目录，可选 (默认: None)
   -r [RES], --res [RES]
-                        decode resources, 0:disable, 1:enable (default: 0)
+                        指定是否要反编译资源文件, 0:禁用, 1:启用 (默认: 0)
   -e [ENGINE], --engine [ENGINE]
-                        decompilation engine, [jadx, dex2jar, enjarify, cfr] (default:
+                        反编译引擎, [jadx, dex2jar, enjarify, cfr] (默认:
                         jadx)
 ```
