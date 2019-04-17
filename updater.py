@@ -3,7 +3,6 @@
 
 import subprocess
 import shutil
-import time
 import stat
 import os
 import glob
@@ -90,7 +89,6 @@ def dex2jar_updater():
             z.extractall(showjar.CACHE_DIR)
         src = os.path.join(showjar.CACHE_DIR, os.listdir(showjar.CACHE_DIR)[0])
         shutil.move(src, showjar.DEX2JAR)
-
     os.chdir(rawdir)
 
 

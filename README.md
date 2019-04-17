@@ -5,14 +5,14 @@
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
-> - update at 2018-10-17
+> - update at 2019-04-17
 >
-> - jadx=0.8.0
+> - jadx=0.9.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - jdgui=1.4.0
-> - apktool=2.3.4
-> - cfr
+> - jdgui=1.4.2
+> - apktool=2.4.0
+> - cfr=0.143
 
 README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/blob/master/README_zh_CN.md)
 

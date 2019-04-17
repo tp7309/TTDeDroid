@@ -14,7 +14,7 @@ set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%..
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and JADX_GUI_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="-Xms128M" "-Xmx4g" "-Dawt.useSystemAAFontSettings=lcd" "-Dswing.aatext=true"
+set DEFAULT_JVM_OPTS="-Xms128M" "-Xmx4g" "-Dawt.useSystemAAFontSettings=lcd" "-Dswing.aatext=true" "-XX:+UseG1GC"
 
 @rem Find javaw.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
@@ -63,7 +63,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\jadx-gui-0.8.0.jar;%APP_HOME%\lib\jfontchooser-1.0.5.jar;%APP_HOME%\lib\jadx-cli-0.8.0.jar;%APP_HOME%\lib\jadx-core-0.8.0.jar;%APP_HOME%\lib\dx-1.14.jar;%APP_HOME%\lib\android-5.1.jar;%APP_HOME%\lib\logback-classic-1.2.3.jar;%APP_HOME%\lib\slf4j-api-1.7.25.jar;%APP_HOME%\lib\rsyntaxtextarea-2.6.1.jar;%APP_HOME%\lib\gson-2.8.5.jar;%APP_HOME%\lib\image-viewer-1.2.3.jar;%APP_HOME%\lib\commons-lang3-3.7.jar;%APP_HOME%\lib\rxjava2-swing-0.2.16.jar;%APP_HOME%\lib\rxjava-2.1.17.jar;%APP_HOME%\lib\commons-io-2.6.jar;%APP_HOME%\lib\asm-6.2.jar;%APP_HOME%\lib\annotations-16.0.2.jar;%APP_HOME%\lib\cloning-1.9.10.jar;%APP_HOME%\lib\jcommander-1.74.jar;%APP_HOME%\lib\reactive-streams-1.0.2.jar;%APP_HOME%\lib\objenesis-2.6.jar;%APP_HOME%\lib\logback-core-1.2.3.jar
+set CLASSPATH=%APP_HOME%\lib\jadx-gui-0.9.0.jar;%APP_HOME%\lib\jfontchooser-1.0.5.jar;%APP_HOME%\lib\jadx-cli-0.9.0.jar;%APP_HOME%\lib\jadx-core-0.9.0.jar;%APP_HOME%\lib\dx-1.16.jar;%APP_HOME%\lib\android-5.1.jar;%APP_HOME%\lib\logback-classic-1.2.3.jar;%APP_HOME%\lib\slf4j-api-1.7.25.jar;%APP_HOME%\lib\rsyntaxtextarea-3.0.0.jar;%APP_HOME%\lib\gson-2.8.5.jar;%APP_HOME%\lib\image-viewer-1.2.3.jar;%APP_HOME%\lib\commons-text-1.6.jar;%APP_HOME%\lib\commons-lang3-3.8.1.jar;%APP_HOME%\lib\rxjava2-swing-0.3.3.jar;%APP_HOME%\lib\rxjava-2.2.5.jar;%APP_HOME%\lib\apksig-3.3.0.jar;%APP_HOME%\lib\commons-io-2.6.jar;%APP_HOME%\lib\asm-7.0.jar;%APP_HOME%\lib\annotations-16.0.3.jar;%APP_HOME%\lib\cloning-1.9.11.jar;%APP_HOME%\lib\jcommander-1.74.jar;%APP_HOME%\lib\reactive-streams-1.0.2.jar;%APP_HOME%\lib\objenesis-2.6.jar;%APP_HOME%\lib\logback-core-1.2.3.jar
 
 @rem Execute jadx-gui
 start "jadx-gui" /B "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %JADX_GUI_OPTS%  -classpath "%CLASSPATH%" jadx.gui.JadxGUI %CMD_LINE_ARGS%
