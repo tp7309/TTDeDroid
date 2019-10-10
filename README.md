@@ -26,16 +26,12 @@ Python 2 (version 2.7 or later), or Python 3 (version 3.5 or later).
 showjar test.apk
 ```
 ### Mac/Linux
-1. add `TTDedroid/bin` directory **absolute path** to `~/.bash_profile`. Be careful **do not wrap "PATH" in quotes**, example:
 ```bash
-export PATH=$PATH:~/Documents/TTDedroid/bin
+git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
+chmod a+x ~/Documents/TTDeroid/bin/showjar
+export PATH=$PATH:~/Documents/TTDedroid/bin >> ~/.bash_profile && source ~/.bash_profile
 ```
-
-2. reload env
-```bash
-source ~/.bash_profile
-```
-3. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
+then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
 ```bash
 showjar test.apk
 ```

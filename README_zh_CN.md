@@ -28,15 +28,13 @@ showjar test.apk
 ```
 
 ### Mac/Linux
-1. 将`TTDedroid/bin` 目录的 **绝对路径** 加入到`~/.bash_profile`文件的 **PATH** 变量中。注意**不要加双引号!**，示例：
+分别执行如下命令：
 ```bash
-export PATH=$PATH:~/Documents/TTDedroid/bin
+git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
+chmod a+x ~/Documents/TTDeroid/bin/showjar
+export PATH=$PATH:~/Documents/TTDedroid/bin >> ~/.bash_profile && source ~/.bash_profile
 ```
-2. 刷新环境变量:
-```bash
-source ~/.bash_profile
-```
-3. 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 ```bash
 showjar test.apk
 ```
