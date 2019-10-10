@@ -5,14 +5,14 @@
 
 一键反编译 **apk/aar/dex/jar**，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视反编译库的更新情况更新工具版本。
 
-> - update at 2019-04-17
+> - update at 2019-10-10
 >
-> - jadx=0.9.0
+> - jadx=1.0.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - jdgui=1.4.2
+> - jdgui=1.6.3
 > - apktool=2.4.0
-> - cfr=0.143
+> - cfr=0.146
 
 # 使用要求
 需要Python环境，没有的[下载](https://www.python.org/downloads/)一个安装完成即可。
