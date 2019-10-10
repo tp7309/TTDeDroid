@@ -32,7 +32,7 @@ showjar test.apk
 ```bash
 git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
 chmod a+x ~/Documents/TTDeroid/bin/showjar
-export PATH=$PATH:~/Documents/TTDedroid/bin >> ~/.bash_profile && source ~/.bash_profile
+echo 'export PATH=$PATH:~/Documents/TTDedroid/bin' >> ~/.bash_profile && source ~/.bash_profile
 ```
 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 ```bash
