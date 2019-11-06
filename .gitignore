@@ -4,6 +4,7 @@ cache/
 sources/
 libs/**/tests/
 .DS_Store
+/.history/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
