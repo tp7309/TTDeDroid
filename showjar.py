@@ -19,7 +19,12 @@ import fnmatch
 import re
 
 
-_ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+# determine if application is a script file or frozen exe
+if getattr(sys, 'frozen', False):
+    application_path = os.path.dirname(sys.executable)
+elif __file__:
+    application_path = os.path.dirname(__file__)
+_ROOT_PATH = os.path.dirname(os.path.abspath(application_path))
 _LIBS = os.path.join(_ROOT_PATH, 'libs')
 
 DEX2JAR = os.path.join(_LIBS, 'dex2jar')
