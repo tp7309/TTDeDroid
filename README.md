@@ -16,12 +16,13 @@ The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on
 > - cfr=0.143
 
 # Requirements
-Python 2 (version 2.7 or later), or Python 3 (version 3.5 or later).
+None, no need python environment.
 
 ## Quick Start
 ### Windows
-1. add `TTDedroid\bin` directory **absolute path** to `PATH` system variable.
-2. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
+1. download source code or go to `releases` page to download file.
+2. add `TTDedroid\bin` directory **absolute path** to `PATH` system variable.
+3. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
 ```bash
 showjar test.apk
 ```

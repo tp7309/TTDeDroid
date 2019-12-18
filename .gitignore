@@ -5,6 +5,7 @@ sources/
 libs/**/tests/
 .DS_Store
 /.history/
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

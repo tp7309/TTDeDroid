@@ -15,14 +15,14 @@
 > - cfr=0.143
 
 # 使用要求
-需要Python环境，Windows没有安装的[下载](https://www.runoob.com/python/python-install.html/)一个安装完成即可。
-Mac/Linux已自带Python环境，不用安装。
+只是使用的话**不需要python环境**。
 
 ## 快速开始
 
 ### Windows
-1. 将`TTDedroid\bin`目录的 **绝对路径** 加入`PATH`环境变量。
-2. 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+1. 下载源码或[去release页下载](https://github.com/tp7309/TTDeDroid/releases).
+2. 将`TTDedroid\bin`目录的 **绝对路径** 加入`PATH`环境变量。
+3. 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 
 ```
 showjar test.apk
