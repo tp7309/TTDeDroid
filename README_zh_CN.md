@@ -5,14 +5,14 @@
 
 一键反编译 **apk/aar/dex/jar**，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视反编译库的更新情况更新工具版本。
 
-> - update at 2019-04-17
+> - update at 2019-10-10
 >
-> - jadx=0.9.0
+> - jadx=1.0.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - jdgui=1.4.2
+> - jdgui=1.6.3
 > - apktool=2.4.0
-> - cfr=0.143
+> - cfr=0.146
 
 # 使用要求
 只是使用的话**不需要python环境**。
@@ -29,9 +29,11 @@ showjar test.apk
 ```
 
 ### Mac/Linux
-1. 将`TTDedroid/bin` 目录的 **绝对路径** 加入到`~/.bash_profile`文件的 **PATH** 变量中。注意**不要加双引号!**，示例：
+1. 分别执行如下命令：
 ```bash
-export PATH=$PATH:~/Documents/TTDedroid/bin
+git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
+chmod a+x ~/Documents/TTDeroid/bin/showjar
+echo 'export PATH=$PATH:~/Documents/TTDedroid/bin' >> ~/.bash_profile && source ~/.bash_profile
 ```
 2. 刷新环境变量:
 ```bash

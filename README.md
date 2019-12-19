@@ -6,14 +6,14 @@ README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/bl
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
-> - update at 2019-04-17
+> - update at 2019-10-10
 >
-> - jadx=0.9.0
+> - jadx=1.0.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - jdgui=1.4.2
+> - jdgui=1.6.3
 > - apktool=2.4.0
-> - cfr=0.143
+> - cfr=0.146
 
 # Requirements
 None, no need python environment.
@@ -27,16 +27,13 @@ None, no need python environment.
 showjar test.apk
 ```
 ### Mac/Linux
-1. add `TTDedroid/bin` directory **absolute path** to `~/.bash_profile`. Be careful **do not wrap "PATH" in quotes**, example:
+run following commands:
 ```bash
-export PATH=$PATH:~/Documents/TTDedroid/bin
+git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
+chmod a+x ~/Documents/TTDeroid/bin/showjar
+echo 'export PATH=$PATH:~/Documents/TTDedroid/bin' >> ~/.bash_profile && source ~/.bash_profile
 ```
-
-2. reload env
-```bash
-source ~/.bash_profile
-```
-3. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
+then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
 ```bash
 showjar test.apk
 ```
