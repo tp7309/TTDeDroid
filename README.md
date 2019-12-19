@@ -16,7 +16,7 @@ The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on
 > - cfr=0.146
 
 # Requirements
-None, no need python environment.
+No need to install python environment.
 
 ## Quick Start
 ### Windows
