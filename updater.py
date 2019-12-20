@@ -66,7 +66,7 @@ def ensure_repo(origin_url, dirname):
         run('git reset --hard HEAD')
         run('git pull --rebase')
     else:
-        run("git clone %s"%(origin_url))
+        run("git clone --depth=1 %s"%(origin_url))
         os.chdir(os.path.join(_SOURCE_DIR, dirname))
         print("changed dir to %s"%(os.getcwd()))
 

@@ -18,13 +18,15 @@ import stat
 import fnmatch
 import re
 
-
 # determine if application is a script file or frozen exe
 if getattr(sys, 'frozen', False):
-    application_path = os.path.dirname(sys.executable)
-elif __file__:
-    application_path = os.path.dirname(__file__)
-_ROOT_PATH = os.path.dirname(os.path.abspath(application_path))
+    bundle_dir = os.path.abspath(os.path.join(os.path.dirname(sys.executable), os.path.pardir))
+else:
+    # we are running in a normal Python environment
+    bundle_dir = os.path.dirname(os.path.abspath(__file__))
+_ROOT_PATH = bundle_dir
+print("root path: " + _ROOT_PATH)
+
 _LIBS = os.path.join(_ROOT_PATH, 'libs')
 
 DEX2JAR = os.path.join(_LIBS, 'dex2jar')
