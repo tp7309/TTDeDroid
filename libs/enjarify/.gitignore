@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+
+*.jar
+.coverage
+htmlcov
+ignore*

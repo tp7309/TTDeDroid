@@ -100,6 +100,8 @@ def enjarify_updater():
     rmtree(showjar.ENJARIFY)
     src = os.path.join(_SOURCE_DIR, 'enjarify')
     copy_git_repo(src, showjar.ENJARIFY)
+    # delete tests/
+    rmtree(os.path.join(showjar.ENJARIFY, 'tests'))
     # 升级enjarify.bat中python3为python
     batpath = os.path.join(showjar.ENJARIFY, 'enjarify.bat')
     content = ''
