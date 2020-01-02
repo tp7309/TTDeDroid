@@ -7,12 +7,12 @@
 
 > - update at 2019-10-10
 >
-> - jadx=1.0.0
+> - jadx=1.1.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - jdgui=1.6.3
-> - apktool=2.4.0
-> - cfr=0.146
+> - jdgui=1.6.6
+> - apktool=2.4.1
+> - cfr=0.148
 
 # 使用要求
 只是使用的话**不需要**手动安装python环境。
