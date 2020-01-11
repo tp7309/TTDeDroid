@@ -6,7 +6,7 @@ README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/bl
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
-> - update at 2019-10-10
+> - update at 2020-01-02
 >
 > - jadx=1.1.0
 > - Storyyeller/enjarify(build by source)
@@ -29,9 +29,12 @@ showjar test.apk
 ### Mac/Linux
 run following commands:
 ```bash
-git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
-chmod a+x ~/Documents/TTDeroid/bin/showjar
-echo 'export PATH=$PATH:~/Documents/TTDedroid/bin' >> ~/.bash_profile && source ~/.bash_profile
+git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeDroid
+chmod a+x ~/Documents/TTDeDroid/bin/showjar
+# Mac
+echo 'export PATH=$PATH:~/Documents/TTDeDroid/bin' >> ~/.bash_profile && source ~/.bash_profile
+# Linux
+echo 'export PATH=$PATH:~/Documents/TTDeDroid/bin' >> ~/.bashrc && source ~/.bashrc
 ```
 then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
 ```bash

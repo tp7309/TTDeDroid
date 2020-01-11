@@ -5,7 +5,7 @@
 
 一键反编译 **apk/aar/dex/jar**，没什么技术含量，只是调调工具命令，脚本找个放的地方，会视反编译库的更新情况更新工具版本。
 
-> - update at 2019-10-10
+> - update at 2020-01-02
 >
 > - jadx=1.1.0
 > - Storyyeller/enjarify(build by source)
@@ -31,9 +31,12 @@ showjar test.apk
 ### Mac/Linux
 1. 分别执行如下命令：
 ```bash
-git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeroid
-chmod a+x ~/Documents/TTDeroid/bin/showjar
-echo 'export PATH=$PATH:~/Documents/TTDedroid/bin' >> ~/.bash_profile && source ~/.bash_profile
+git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeDroid
+chmod a+x ~/Documents/TTDeDroid/bin/showjar
+# Mac
+echo 'export PATH=$PATH:~/Documents/TTDeDroid/bin' >> ~/.bash_profile && source ~/.bash_profile
+# Linux
+echo 'export PATH=$PATH:~/Documents/TTDeDroid/bin' >> ~/.bashrc && source ~/.bashrc
 ```
 2. 刷新环境变量:
 ```bash
