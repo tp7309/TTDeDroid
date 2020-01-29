@@ -33,10 +33,11 @@ showjar test.apk
 ```bash
 git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeDroid
 chmod a+x ~/Documents/TTDeDroid/bin/showjar
+showjardir='export PATH=$PATH:'$HOME/Documents/TTDeDroid/bin
 # Mac
-echo 'export PATH=$PATH:~/Documents/TTDeDroid/bin' >> ~/.bash_profile && source ~/.bash_profile
+echo $showjardir >> ~/.bash_profile && source ~/.bash_profile
 # Linux
-echo 'export PATH=$PATH:~/Documents/TTDeDroid/bin' >> ~/.bashrc && source ~/.bashrc
+echo $showjardir >> ~/.bashrc && source ~/.bashrc
 ```
 2. 刷新环境变量:
 ```bash
