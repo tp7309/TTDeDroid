@@ -39,11 +39,7 @@ echo $showjardir >> ~/.bash_profile && source ~/.bash_profile
 # Linux
 echo $showjardir >> ~/.bashrc && source ~/.bashrc
 ```
-2. 刷新环境变量:
-```bash
-source ~/.bash_profile
-```
-3. 之后便可以在任何目录执行下面的命令反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+2. 之后便可以在任何目录执行下面的命令反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 ```bash
 showjar test.apk
 ```
