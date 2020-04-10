@@ -107,7 +107,7 @@ def main():
         args.output = os.path.join(os.getcwd(), args.output)
     cache = args.output if args.output else CACHE_DIR
 
-    # rebuild cache dir
+    # recreate cache dir
     if os.path.abspath(cache) == os.path.abspath(CACHE_DIR):
         print("clearing cache...")
         rmtree(CACHE_DIR)
@@ -232,11 +232,8 @@ def decompile_by_enjarify(cache, args):
 
 
 def decompile_by_jadx(cache, args):
-    # jadx has bug when pass .aar file.
-    if args.file.endswith('.apk'):
-        inputs = [args.file]
-    else:
-        inputs = dex2jar(cache, args)
+    # support *.apk/*.aar/*.dex/*.jar
+    inputs = [args.file]
     make_executable(jadxpath())
     for file in inputs:
         if args.res == 1:
@@ -292,7 +289,7 @@ def dex2jar(cache, args):
         print("error file extension!")
 
     resdest = os.path.join(cache, 'res')
-    print("when decompile resources done, store path: %s" % (resdest))
+    print("when decompile resources done, resources stored in: %s" % (resdest))
     return jars
 
 

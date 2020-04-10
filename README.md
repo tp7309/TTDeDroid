@@ -6,14 +6,14 @@ README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/bl
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
-> - update at 2020-01-02
+> - update at 2020-04-10
 >
 > - jadx=1.1.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
 > - jdgui=1.6.6
 > - apktool=2.4.1
-> - cfr=0.148
+> - cfr=0.149
 
 # Requirements
 No need to install python environment.

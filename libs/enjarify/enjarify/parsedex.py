@@ -271,6 +271,9 @@ class DexFile:
             return desc
         elif desc.startswith(b'L'):
             return desc[1:-1]
+        # Not sure how to handle primative classes properly,
+        # but this should hopefully be good enough.
+        return desc
 
     def field_id(self, i): return FieldId(self, i)
     def method_id(self, i): return MethodId(self, i)

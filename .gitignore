@@ -6,6 +6,10 @@ libs/**/tests/
 .DS_Store
 /.history/
 Pipfile.lock
+libs/**/README.md
+libs/**/LICENSE
+libs/**/LICENSE.txt
+libs/**/NOTICE
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
