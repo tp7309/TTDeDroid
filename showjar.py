@@ -146,9 +146,14 @@ def rmtree(path):
         shutil.rmtree(path, onerror=readonly_handler)
 
 
+def hasexec(cmd):
+    result = sh("%s --version" % (cmd), print_msg=False)
+    return not ('not found' in result or u'不是' in result)
+
+
 def openfile(path):
     # open with vscode by default
-    if 'not' not in sh("code -v", print_msg=False):
+    if hasexec('code'):
         run("code \"%s\""%(path))
         return
 
