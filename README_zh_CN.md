@@ -20,26 +20,32 @@
 ## 快速开始
 
 ### Windows
-1. 下载源码或[去release页下载](https://github.com/tp7309/TTDeDroid/releases).
+1. [去release页下载](https://github.com/tp7309/TTDeDroid/releases)，有中国下载地址能下载快些，也可以直接下载源码。
 2. 将`TTDedroid\bin`目录的 **绝对路径** 加入`PATH`环境变量。
-3. 之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 
+之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 ```
 showjar test.apk
 ```
 
 ### Mac/Linux
-1. 分别执行如下命令：
+[去release页下载](https://github.com/tp7309/TTDeDroid/releases)，有中国下载地址能下载快些。
 ```bash
-git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeDroid
+//也可以直接下载源码，中国下载慢，不推荐。
+//git clone --depth=1 https://github.com/tp7309/TTDeDroid.git ~/Documents/TTDeDroid
+
+//给脚本执行权限
 chmod a+x ~/Documents/TTDeDroid/bin/showjar
 showjardir='export PATH=$PATH:'$HOME/Documents/TTDeDroid/bin
+
+//添加脚本执行路径到环境变量
 # Mac
 echo $showjardir >> ~/.bash_profile && source ~/.bash_profile
 # Linux
 echo $showjardir >> ~/.bashrc && source ~/.bashrc
 ```
-2. 之后便可以在任何目录执行下面的命令反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+
+之后便可以在任何目录执行下面的命令反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
 ```bash
 showjar test.apk
 ```
