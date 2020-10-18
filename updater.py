@@ -46,9 +46,8 @@ def rmtree(path):
 
 
 def copy_git_repo(src, dest):
-    def app_ignore_pattern(path, names):
-        return ['build', '.git', '.gradle', '.idea', '*.idea']
-    shutil.copytree(src, dest, ignore=app_ignore_pattern)
+    app_ignore = shutil.ignore_patterns('build', '.git', '.gradle', '.idea', '*.idea')
+    overwrite_tree(src, dest, ignore=app_ignore)
 
 
 def lastest_tag():
@@ -71,6 +70,24 @@ def ensure_repo(origin_url, dirname):
         print("changed dir to %s"%(os.getcwd()))
 
 
+def overwrite_tree(src, dest, ignore=None):
+    if os.path.isdir(src):
+        if not os.path.isdir(dest):
+            os.makedirs(dest)
+        files = os.listdir(src)
+        if ignore is not None:
+            ignored = ignore(src, files)
+        else:
+            ignored = set()
+        for f in files:
+            if f not in ignored:
+                overwrite_tree(os.path.join(src, f),
+                               os.path.join(dest, f),
+                               ignore)
+    else:
+        shutil.copyfile(src, dest)
+
+
 def dex2jar_updater():
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
@@ -83,12 +100,11 @@ def dex2jar_updater():
     distzipdir = os.path.join('dex-tools', 'build', 'distributions')
     distzips = glob.glob("%s/dex-tools*.zip"%(distzipdir))
     if distzips:
-        rmtree(showjar.DEX2JAR)
         rmtree(showjar.CACHE_DIR)
         with zipfile.ZipFile(distzips[0], 'r') as z:
             z.extractall(showjar.CACHE_DIR)
         src = os.path.join(showjar.CACHE_DIR, os.listdir(showjar.CACHE_DIR)[0])
-        shutil.move(src, showjar.DEX2JAR)
+        overwrite_tree(src, showjar.DEX2JAR)
     os.chdir(rawdir)
 
 
@@ -97,7 +113,6 @@ def enjarify_updater():
     os.chdir(_SOURCE_DIR)
     ensure_repo('https://github.com/Storyyeller/enjarify.git', 'enjarify')
     os.chdir(os.path.join(_SOURCE_DIR, 'enjarify'))
-    rmtree(showjar.ENJARIFY)
     src = os.path.join(_SOURCE_DIR, 'enjarify')
     copy_git_repo(src, showjar.ENJARIFY)
     # delete tests/
