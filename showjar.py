@@ -78,7 +78,7 @@ def clean_temp_error_files():
 # clean strange file name
 def clean_filename(cache, path):
     name = os.path.basename(path)
-    pattern = re.compile(u"[-\.\(\)\w]+")
+    pattern = re.compile(u"[-\\.\\w]+")
     name2 = '_'.join(re.findall(pattern, name))
     if name != name2:
         newname = "ttdedroid_%s"%(name2)
@@ -86,53 +86,6 @@ def clean_filename(cache, path):
         shutil.copyfile(path, newpath)
         return newpath
     return path
-
-
-def main():
-    parser = argparse.ArgumentParser(description='android decompile tool',
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-o', '--output', nargs='?',
-                        help='output directory, optional')
-    parser.add_argument('-r', '--res', nargs='?', type=int, default=0,
-                        help='decode resources, 0:disable, 1:enable')
-    parser.add_argument('-e', '--engine', nargs='?', default='jadx',
-                        help='decompiler engine, [jadx, dex2jar, enjarify, cfr]')
-    parser.add_argument('-t', nargs='?', type=int,
-                        default=0, help=argparse.SUPPRESS)
-    parser.add_argument(
-        'file', help='input file path, *.apk/*.aar/*.dex/*.jar')
-    args = parser.parse_args()
-
-    if args.output:
-        args.output = os.path.join(os.getcwd(), args.output)
-    cache = args.output if args.output else CACHE_DIR
-
-    # recreate cache dir
-    if os.path.abspath(cache) == os.path.abspath(CACHE_DIR):
-        print("clearing cache...")
-        rmtree(CACHE_DIR)
-        print("clear cache done")
-    if not os.path.exists(cache):
-        os.mkdir(cache)
-
-    f = os.path.join(os.getcwd(), args.file)
-    f = clean_filename(cache, f)
-    # fix windows path
-    if ":\\" in f and ":\\\\" not in f:
-        f = f.replace("\\", "\\\\")
-    args.file = f
-
-    print("output dir: %s" % (cache))
-    if args.engine == 'jadx':
-        decompile_by_jadx(cache, args)
-    elif args.engine == 'enjarify':
-        decompile_by_enjarify(cache, args)
-    elif args.engine == 'cfr':
-        decompile_by_cfr(cache, args)
-    else:
-        decompile_by_dex2jar(cache, args)
-    clean_temp_error_files()
-    print("\nDone")
 
 
 def readonly_handler(func, path, execinfo):
@@ -258,6 +211,7 @@ def dex2jar(cache, args):
     temp_dir = os.path.abspath(
         os.path.join(cache,
                      os.path.splitext(os.path.basename(args.file))[0]))
+    print(args.file)
     if args.file.endswith(".apk") or args.file in _NEED_UNZIP_FILES:
         print("unzip %s..." % (args.file))
         with zipfile.ZipFile(args.file, 'r') as z:
@@ -291,7 +245,7 @@ def dex2jar(cache, args):
     elif args.file.endswith(".jar"):
         jars.append(args.file)
     else:
-        print("error file extension!")
+        print("invalid file extension!")
 
     resdest = os.path.join(cache, 'res')
     print("when decompile resources done, resources stored in: %s" % (resdest))
@@ -311,6 +265,53 @@ def deres(cache, args):
         run(newshell("java -jar %s d %s -f -o %s" %
                      (apktoolpath(), args.file, resdest)))
         print("decompile resources done, path: %s" % (resdest))
+
+
+def main():
+    parser = argparse.ArgumentParser(description='android decompile tool',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('-o', '--output', nargs='?',
+                        help='output directory, optional')
+    parser.add_argument('-r', '--res', nargs='?', type=int, default=0,
+                        help='decode resources, 0:disable, 1:enable')
+    parser.add_argument('-e', '--engine', nargs='?', default='jadx',
+                        help='decompiler engine, [jadx, dex2jar, enjarify, cfr]')
+    parser.add_argument('-t', nargs='?', type=int,
+                        default=0, help=argparse.SUPPRESS)
+    parser.add_argument(
+        'file', help='input file path, *.apk/*.aar/*.dex/*.jar')
+    args = parser.parse_args()
+
+    if args.output:
+        args.output = os.path.join(os.getcwd(), args.output)
+    cache = args.output if args.output else CACHE_DIR
+
+    # recreate cache dir
+    if os.path.abspath(cache) == os.path.abspath(CACHE_DIR):
+        print("clearing cache...")
+        rmtree(CACHE_DIR)
+        print("clear cache done")
+    if not os.path.exists(cache):
+        os.mkdir(cache)
+
+    f = os.path.join(os.getcwd(), args.file)
+    f = clean_filename(cache, f)
+    # fix windows path
+    if ":\\" in f and ":\\\\" not in f:
+        f = f.replace("\\", "\\\\")
+    args.file = f
+
+    print("output dir: %s" % (cache))
+    if args.engine == 'jadx':
+        decompile_by_jadx(cache, args)
+    elif args.engine == 'enjarify':
+        decompile_by_enjarify(cache, args)
+    elif args.engine == 'cfr':
+        decompile_by_cfr(cache, args)
+    else:
+        decompile_by_dex2jar(cache, args)
+    clean_temp_error_files()
+    print("\nDone")
 
 
 if __name__ == "__main__":
