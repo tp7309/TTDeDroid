@@ -141,10 +141,6 @@ def apktool_updater():
     webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
 
 
-def cfr_updater():
-    webbrowser.open_new_tab("http://www.benf.org/other/cfr/")
-
-
 def main():
     ensure_dir(_SOURCE_DIR)
     enjarify_updater()
@@ -152,7 +148,6 @@ def main():
     jadx_updater()
     jdgui_updater()
     apktool_updater()
-    cfr_updater()
 
 
 if __name__ == '__main__':

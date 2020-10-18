@@ -34,7 +34,6 @@ JDGUI = os.path.join(_LIBS, 'jd-gui')
 APKTOOL = os.path.join(_LIBS, 'apktool')
 JADX = os.path.join(_LIBS, 'jadx')
 ENJARIFY = os.path.join(_LIBS, 'enjarify')
-CFR = os.path.join(_LIBS, 'cfr')
 
 CACHE_DIR = os.path.join(_ROOT_PATH, 'cache')
 # may be robust patch file, match full path.
@@ -148,26 +147,6 @@ def jadxpath():
         return os.path.join(JADX, 'bin', 'jadx-gui')
 
 
-def cfrpath():
-    return findjar(CFR, 'cfr*.jar')
-
-
-def decompile_by_cfr(cache, args):
-    print('use dex2jar to extract jars...')
-    jars = dex2jar(cache, args)
-    if not jars:
-        print("unsupport decompile %s" % (args.file))
-        return
-    name = os.path.splitext(os.path.basename(args.file))[0]
-    cache_path = os.path.join(cache, name)
-
-    for jar in jars:
-        run("java -Xms256m -Xmx1024m -jar %s %s --outputdir %s" %
-            (cfrpath(), jar, cache_path))
-    if args.t == 0:
-        openfile(cache_path)
-
-
 def decompile_by_enjarify(cache, args):
     if not args.file.endswith('.apk') and not args.file.endswith('.dex'):
         print("enjarify only support apk/dex file!")
@@ -275,7 +254,7 @@ def main():
     parser.add_argument('-r', '--res', nargs='?', type=int, default=0,
                         help='decode resources, 0:disable, 1:enable')
     parser.add_argument('-e', '--engine', nargs='?', default='jadx',
-                        help='decompiler engine, [jadx, dex2jar, enjarify, cfr]')
+                        help='decompiler engine, [jadx, dex2jar, enjarify]')
     parser.add_argument('-t', nargs='?', type=int,
                         default=0, help=argparse.SUPPRESS)
     parser.add_argument(
@@ -306,8 +285,6 @@ def main():
         decompile_by_jadx(cache, args)
     elif args.engine == 'enjarify':
         decompile_by_enjarify(cache, args)
-    elif args.engine == 'cfr':
-        decompile_by_cfr(cache, args)
     else:
         decompile_by_dex2jar(cache, args)
     clean_temp_error_files()

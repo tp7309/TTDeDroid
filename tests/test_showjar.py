@@ -133,15 +133,3 @@ class Test_emulator_port(unittest.TestCase):
         self.assertTrue(os.path.exists(output_file))
         if os.path.exists(cache):
             shutil.rmtree(cache, True)
-
-    def test_cfr(self):
-        apk_path = get_another_apk_path()
-        shutil.copyfile(TEST_APK, apk_path)
-        cache = os.path.dirname(apk_path)
-        outputdir = os.path.join(cache, os.path.splitext(os.path.basename(apk_path))[0])
-        sh("python showjar.py -e cfr -o %s -t 1 %s"%(cache, apk_path))
-        for f in find_files(outputdir, "*.java"):
-            self.assertTrue(f)
-            break
-        if os.path.exists(cache):
-            shutil.rmtree(cache, True)

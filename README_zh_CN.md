@@ -12,7 +12,6 @@
 > - dex2jar(build by source)
 > - jdgui=1.6.6
 > - apktool=2.4.1
-> - cfr=0.149
 
 # 使用要求
 只是使用的话**不需要**手动安装python环境。
@@ -67,6 +66,6 @@ Android一键反编译工具
   -r [RES], --res [RES]
                         指定是否要反编译资源文件, 0:禁用, 1:启用 (默认: 0)
   -e [ENGINE], --engine [ENGINE]
-                        反编译引擎, [jadx, dex2jar, enjarify, cfr] (默认:
+                        反编译引擎, [jadx, dex2jar, enjarify] (默认:
                         jadx)
 ```
