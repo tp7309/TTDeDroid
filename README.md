@@ -1,8 +1,8 @@
 # TTDeDroid
 [![Build Status](https://travis-ci.com/tp7309/TTDeDroid.svg?branch=master)](https://travis-ci.com/tp7309/TTDeDroid)
-<!-- [![codecov](https://codecov.io/gh/tp7309/TTDeDroid/branch/master/graph/badge.svg?token=lyEWTqfeb9)](https://codecov.io/gh/tp7309/TTDeDroid) -->
 [![DeepSource](https://deepsource.io/gh/tp7309/TTDeDroid.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/tp7309/TTDeDroid/?ref=repository-badge)
 README i18n: [中文说明](https://github.com/tp7309/TTDeDroid/blob/master/README_zh_CN.md)
+<!-- [![codecov](https://codecov.io/gh/tp7309/TTDeDroid/branch/master/graph/badge.svg?token=lyEWTqfeb9)](https://codecov.io/gh/tp7309/TTDeDroid) -->
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
