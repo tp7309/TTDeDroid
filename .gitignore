@@ -10,6 +10,7 @@ libs/**/README.md
 libs/**/LICENSE
 libs/**/LICENSE.txt
 libs/**/NOTICE
+repack.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

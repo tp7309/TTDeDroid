@@ -1,8 +1,8 @@
 # TTDeDroid
-[![Build Status](https://travis-ci.org/tp7309/TTDeDroid.svg?branch=master)](https://travis-ci.org/tp7309/TTDeDroid)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2778d8960e094469bc7d4b04d28eb059)](https://www.codacy.com/app/tp7309/TTDeDroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tp7309/TTDeDroid&amp;utm_campaign=Badge_Grade)
-<!-- [![Coverage Status](https://coveralls.io/repos/github/tp7309/TTDeDroid/badge.svg?branch=master)](https://coveralls.io/github/tp7309/TTDeDroid?branch=master) -->
-README i18n: [中文说明](https://github.com/tp7309/AndroidOneKeyDecompiler/blob/master/README_zh_CN.md)
+[![Build Status](https://travis-ci.com/tp7309/TTDeDroid.svg?branch=master)](https://travis-ci.com/tp7309/TTDeDroid)
+<!-- [![codecov](https://codecov.io/gh/tp7309/TTDeDroid/branch/master/graph/badge.svg?token=lyEWTqfeb9)](https://codecov.io/gh/tp7309/TTDeDroid) -->
+[![DeepSource](https://deepsource.io/gh/tp7309/TTDeDroid.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/tp7309/TTDeDroid/?ref=repository-badge)
+README i18n: [中文说明](https://github.com/tp7309/TTDeDroid/blob/master/README_zh_CN.md)
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
