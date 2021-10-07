@@ -6,13 +6,13 @@ README i18n: [中文说明](https://github.com/tp7309/TTDeDroid/blob/master/READ
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
-> - update at 2021-03-28
+> - update at 2021-10-07
 >
 > - jadx=1.2.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
 > - jdgui=1.6.6
-> - apktool=2.5.0
+> - apktool=2.6.6
 
 # Requirements
 No need to install python environment.
