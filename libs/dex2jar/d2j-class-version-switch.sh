@@ -45,4 +45,4 @@ else
     done
 fi
 
-java -Xms512m -Xmx1024m -classpath "${_classpath}" "com.googlecode.dex2jar.tools.ClassVersionSwitch" "$@"
+java -Xms512m -Xmx2048m -classpath "${_classpath}" "com.googlecode.dex2jar.tools.ClassVersionSwitch" "$@"
