@@ -3,6 +3,7 @@ import shutil
 import os
 import stat
 import subprocess
+import webbrowser
 
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -16,17 +17,23 @@ def readonly_handler(func, path, execinfo):
 
 def rmtree(path):
     if os.path.exists(path):
-        rmtree(path, onerror=readonly_handler)
+        if os.path.isdir(path):
+            shutil.rmtree(path, onerror=readonly_handler)
+        else:
+            os.remove(path)
 
 
-def main():
-    destdir = os.path.join(os.path.expanduser('~'), 'Downloads')
-    zippath = os.path.join(destdir, "TTDeDroid.zip")
+def repack():
+    download_dir = os.path.join(os.path.expanduser('~'), 'Downloads')
+    zippath = os.path.join(download_dir, "TTDeDroid.7z")
+    destdir = os.path.abspath(os.path.join(download_dir, 'TTDeDroid'))
 
+    print("start copy dir:")
     rmtree(zippath)
-    # shutil.copy(_ROOT_PATH, destdir)
-    subprocess.call("cp -r %s %s"%('_ROOT_PATH', destdir), shell=True)
-    os.chdir(os.path.join(destdir, "TTDeDroid"))
+    rmtree(destdir)
+    shutil.copytree(_ROOT_PATH, destdir)
+    # subprocess.call("cp -r %s %s"%(_ROOT_PATH, destdir), shell=True)
+    os.chdir(destdir)
     rmtree(".git")
     rmtree("sources")
     rmtree("cache")
@@ -35,9 +42,28 @@ def main():
     rmtree(".vscode")
     rmtree(".history")
     rmtree("__pycache__")
-    os.remove('.DS_Store')
-    subprocess.call("7z a %s %s"%(os.path.join(destdir, "TTDeDroid"), zippath))
+    rmtree('.DS_Store')
+    print("7z a %s %s"%(zippath, os.path.join(destdir, '*')))
+    subprocess.call("7z a %s %s"%(zippath, os.path.join(destdir, '*')))
+    if os.path.exists(zippath):
+        print("zip file pack done")
+
+
+def build_executable_file():
+    os.chdir(_ROOT_PATH)
+    subprocess.call("pyinstaller -F showjar.py", shell=True)
+    if os.path.exists("bin/showjar.bat"):
+        os.rename("bin/showjar.bat", "bin/bak_showjar.bat")
+    if os.path.exists("bin/bak_showjar.exe"):
+        os.remove("bin/bak_showjar.exe")
+    shutil.copyfile("dist/showjar.exe", "bin/showjar.exe")
+
+
+def upload_to_mirror():
+    webbrowser.open_new_tab('https://gitee.com/tp7309/ReleaseRepo/tree/master/TTDeDroid')
 
 
 if __name__ == '__main__':
-    main()
+    build_executable_file()
+    repack()
+    upload_to_mirror()

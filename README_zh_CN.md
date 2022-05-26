@@ -5,13 +5,13 @@
 
 一键反编译 **apk/aar/dex/jar**，没什么技术含量，只是调调工具命令，处理些兼容性问题，会视反编译库的更新情况更新工具版本。
 
-> - update at 2022-01-09
+> - update at 2022-05-22
 >
-> - jadx=1.3.1
+> - jadx=1.4.0
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - jdgui=1.6.6
-> - apktool=2.6.0
+> - fernflower=221.5591.52(IntelliJ IDEA official decompiler)
+> - apktool=2.6.1
 
 # 使用要求
 只是使用的话**不需要**手动安装python环境。
@@ -66,6 +66,6 @@ Android一键反编译工具
   -r [RES], --res [RES]
                         指定是否要反编译资源文件, 0:禁用, 1:启用 (默认: 0)
   -e [ENGINE], --engine [ENGINE]
-                        反编译引擎, [jadx, dex2jar, enjarify] (默认:
+                        反编译引擎, [jadx, dex2jar, fernflower, enjarify] (默认:
                         jadx)
 ```

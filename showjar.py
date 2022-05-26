@@ -31,9 +31,11 @@ _LIBS = os.path.join(_ROOT_PATH, 'libs')
 
 DEX2JAR = os.path.join(_LIBS, 'dex2jar')
 JDGUI = os.path.join(_LIBS, 'jd-gui')
+
 APKTOOL = os.path.join(_LIBS, 'apktool')
 JADX = os.path.join(_LIBS, 'jadx')
 ENJARIFY = os.path.join(_LIBS, 'enjarify')
+FERNFLOWER = os.path.join(_LIBS, 'fernflower')
 
 CACHE_DIR = os.path.join(_ROOT_PATH, 'cache')
 # may be robust patch file, match full path.
@@ -103,6 +105,54 @@ def hasexec(cmd):
     return not ('not found' in result or u'不是' in result)
 
 
+def find_jdk11_or_greater_version():
+    def isValidJdk(jdkpath):
+        re_jdk_version = r'\"(\d+)\.(\d+)\.(\d+).*\"'
+        try:
+            # print(jdkpath)
+            result = re.findall(re_jdk_version, sh("\"%s\" -version"%(jdkpath), print_msg=False))
+            print("find java version: %s"%(result))
+            if not result:
+                return False
+            result = result[0]
+            major_version = int(result[0])
+            second_version = int(result[1])
+            # print("%i.%i"%(major_version, second_version))
+            if major_version > 1:
+                return True
+            else:
+                return major_version >= 1 and second_version >= 11
+        except Exception as e:
+            print(e)
+            return False
+
+    # check current java version
+    if(isValidJdk('java')):
+        return 'java'
+
+    files = []
+    # find 'java' in "JAVA_HOME" directory
+    java_home = os.environ.get('JAVA_HOME', '')
+    if java_home:
+        # print(java_home)
+        java_home_parent_dir = os.path.abspath(os.path.join(java_home, os.path.pardir))
+        print("find 'java' in java_home_parent_dir: %s"%(java_home_parent_dir))
+        files = files + glob.glob("%s/*/bin/java"%(java_home_parent_dir))
+        files = files + glob.glob("%s/*/bin/java.exe"%(java_home_parent_dir))
+    jdks_path = os.path.join(os.path.expanduser('~'), '.jdks')
+    if jdks_path:
+        print("find 'java' in %s"%(jdks_path))
+        files = files + glob.glob("%s/*/bin/java"%(jdks_path))
+        files = files + glob.glob("%s/*/bin/java.exe"%(jdks_path))
+    print("founded jdk locations:")
+    print(files)
+    for file in files:
+        if isValidJdk(file):
+            print("found jdk location(jdk>=11): %s"%(file))
+            return file
+    return None
+
+
 def openfile(path):
     # open with vscode by default
     if hasexec('code'):
@@ -147,6 +197,21 @@ def jadxpath():
         return os.path.join(JADX, 'bin', 'jadx-gui')
 
 
+def fernflowerpath():
+    return os.path.join(FERNFLOWER, 'fernflower.jar')
+
+
+def show_jar_gui(files):
+    if not files:
+        print("not jar input")
+    make_executable(jadxpath())
+    for jar in files:
+        run("java -jar %s %s"%(jdguipath(), jar))
+    # filepath = ' '.join(files)
+    # print("use jadx to view class reference...")
+    # run("%s -j 8 %s" % (jadxpath(), filepath))
+
+
 def decompile_by_enjarify(cache, args):
     if not args.file.endswith('.apk') and not args.file.endswith('.dex'):
         print("enjarify only support apk/dex file!")
@@ -165,18 +230,16 @@ def decompile_by_enjarify(cache, args):
     run("%s -o %s %s" % (enjarify, output_file, args.file))
     jars = glob.glob("%s/*.jar" % (cache))
     if jars and args.t == 0:
-        run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
+        show_jar_gui(jars)
 
 
 def decompile_by_jadx(cache, args):
     # support *.apk/*.aar/*.dex/*.jar
-    inputs = [args.file]
     make_executable(jadxpath())
-    for file in inputs:
-        if args.res == 1:
-            run("%s -r -j 8 %s" % (jadxpath(), file))
-        else:
-            run("%s -j 8 %s" % (jadxpath(), file))
+    if args.res == 1:
+        run("%s -r -j 8 %s" % (jadxpath(), args.file))
+    else:
+        run("%s -j 8 %s" % (jadxpath(), args.file))
 
 
 def dex2jar(cache, args):
@@ -233,8 +296,26 @@ def dex2jar(cache, args):
 
 def decompile_by_dex2jar(cache, args):
     jars = dex2jar(cache, args)
-    if jars and not args.t == 1:
-        run("java -jar %s %s" % (jdguipath(), ' '.join(jars)))
+    if not jars:
+        return
+    show_jar_gui(jars)
+
+
+def decompile_by_fernflower(cache, args):
+    # support *.apk/*.aar/*.dex/*.jar
+    make_executable(fernflowerpath())
+    jars = dex2jar(cache, args)
+    if not jars:
+        return
+    print('fernflower need jdk>=11, ensure jdk11 or above version is installed...')
+    jdkpath = find_jdk11_or_greater_version()
+    if not jdkpath:
+        print("fernflower need jdk>=11, but not found!")
+        return
+    for jar in jars:
+        run("%s -jar %s %s %s"%(jdkpath, fernflowerpath(), jar, cache))
+    jars = glob.glob("%s/%s"%(cache, "*.jar"))
+    show_jar_gui(jars)
 
 
 def deres(cache, args):
@@ -254,7 +335,7 @@ def main():
     parser.add_argument('-r', '--res', nargs='?', type=int, default=0,
                         help='decode resources, 0:disable, 1:enable')
     parser.add_argument('-e', '--engine', nargs='?', default='jadx',
-                        help='decompiler engine, [jadx, dex2jar, enjarify]')
+                        help='decompiler engine, [jadx, dex2jar, enjarify,fernflower]')
     parser.add_argument('-t', nargs='?', type=int,
                         default=0, help=argparse.SUPPRESS)
     parser.add_argument(
@@ -273,7 +354,9 @@ def main():
     if not os.path.exists(cache):
         os.mkdir(cache)
 
-    f = os.path.join(os.getcwd(), args.file)
+    f = args.file
+    if not os.path.isabs(args.file):
+        f = os.path.join(os.getcwd(), args.file)
     f = clean_filename(cache, f)
     # fix windows path
     if ":\\" in f and ":\\\\" not in f:
@@ -285,6 +368,8 @@ def main():
         decompile_by_jadx(cache, args)
     elif args.engine == 'enjarify':
         decompile_by_enjarify(cache, args)
+    elif args.engine == 'fernflower':
+        decompile_by_fernflower(cache, args)
     else:
         decompile_by_dex2jar(cache, args)
     clean_temp_error_files()

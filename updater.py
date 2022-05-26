@@ -133,21 +133,36 @@ def jadx_updater():
     webbrowser.open_new_tab("https://github.com/skylot/jadx/releases")
 
 
-def jdgui_updater():
-    webbrowser.open_new_tab("https://github.com/java-decompiler/jd-gui/releases")
-
-
 def apktool_updater():
     webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
 
 
+def fernflower_updater():
+    rawdir = os.getcwd()
+    os.chdir(_SOURCE_DIR)
+    if "not found" in sh("mvn -v"):
+        print("please configure maven first!")
+        return
+    os.chdir(os.path.join(_SOURCE_DIR, 'fernflower'))
+    run("mvn dependency:get -DrepoUrl=https://www.jetbrains.com/intellij-repository/releases/ \
+    -Dartifact=com.jetbrains.intellij.java:java-decompiler-engine:LATEST -Ddest=.")
+    jars = glob.glob("%s/%s" % (os.getcwd(), "java-decompiler-engine*.jar"))
+    if not jars:
+        print("expected jar is not found!")
+        return
+    jar = jars[0]
+    print("latest jar: %s"%(jar))
+    shutil.copyfile(jar, showjar.fernflowerpath())
+    os.chdir(rawdir)
+
+
 def main():
     ensure_dir(_SOURCE_DIR)
-    enjarify_updater()
-    dex2jar_updater()
-    jadx_updater()
-    jdgui_updater()
-    apktool_updater()
+    # enjarify_updater()
+    # dex2jar_updater()
+    # jadx_updater()
+    # apktool_updater()
+    fernflower_updater()
 
 
 if __name__ == '__main__':
