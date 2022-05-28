@@ -124,6 +124,7 @@ def enjarify_updater():
         content = f.read()
     with open(batpath, 'w', encoding='utf-8') as f:
         content = content.replace('python3 ', 'python ')
+        content = content.replace('py -3 ', 'python ')
         f.write(content)
 
     os.chdir(rawdir)
@@ -158,10 +159,10 @@ def fernflower_updater():
 
 def main():
     ensure_dir(_SOURCE_DIR)
-    # enjarify_updater()
-    # dex2jar_updater()
-    # jadx_updater()
-    # apktool_updater()
+    enjarify_updater()
+    dex2jar_updater()
+    jadx_updater()
+    apktool_updater()
     fernflower_updater()
 
 

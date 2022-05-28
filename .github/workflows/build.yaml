@@ -1,0 +1,32 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.5","3.6", "3.7", "3.8", "3.9"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Test
+        run: |
+          pytest --cov tests --cov-report xml
+      - name: Report test coverage to DeepSource
+          uses: deepsourcelabs/test-coverage-action@master
+          with:
+            key: python
+            coverage-file: coverage.xml
+            dsn: ${{ secrets.DEEPSOURCE_DSN }}
+            # fail-ci-on-error: false

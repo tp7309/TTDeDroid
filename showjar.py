@@ -296,9 +296,8 @@ def dex2jar(cache, args):
 
 def decompile_by_dex2jar(cache, args):
     jars = dex2jar(cache, args)
-    if not jars:
-        return
-    show_jar_gui(jars)
+    if jars and args.t == 0:
+        show_jar_gui(jars)
 
 
 def decompile_by_fernflower(cache, args):
@@ -315,7 +314,9 @@ def decompile_by_fernflower(cache, args):
     for jar in jars:
         run("%s -jar %s %s %s"%(jdkpath, fernflowerpath(), jar, cache))
     jars = glob.glob("%s/%s"%(cache, "*.jar"))
-    show_jar_gui(jars)
+    print(jars)
+    if jars and args.t == 0:
+        show_jar_gui(jars)
 
 
 def deres(cache, args):

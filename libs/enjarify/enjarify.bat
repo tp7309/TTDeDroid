@@ -15,4 +15,4 @@ REM  See the License for the specific language governing permissions and
 REM  limitations under the License.
 
 set PYTHONPATH=%~dp0
-py -3 -O -m enjarify.main %*
+python -O -m enjarify.main %*
