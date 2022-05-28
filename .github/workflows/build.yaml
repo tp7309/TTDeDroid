@@ -24,7 +24,7 @@ jobs:
         run: |
           pytest --cov tests --cov-report xml
       - name: Report test coverage to DeepSource
-          uses: deepsourcelabs/test-coverage-action@master
+          uses: deepsourcelabs/test-coverage-action@v1.0.0
           with:
             key: python
             coverage-file: coverage.xml
