@@ -13,6 +13,10 @@ import fnmatch
 TEST_APK = 'test.apk'
 
 
+cache_dir = ''
+temp_dir = ''
+
+
 def sh(command, print_msg=True):
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

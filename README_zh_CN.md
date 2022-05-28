@@ -1,5 +1,5 @@
 # TTDeDroid
-[![Build Status](https://travis-ci.com/tp7309/TTDeDroid.svg?branch=master)](https://travis-ci.com/tp7309/TTDeDroid)
+[![Build Status](https://github.com/tp7309/TTDeDroid/actions/workflows/build.yaml/badge.svg?branch=master)](https://github.com/tp7309/TTDeDroid/actions/workflows/build.yaml)
 [![DeepSource](https://deepsource.io/gh/tp7309/TTDeDroid.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/tp7309/TTDeDroid/?ref=repository-badge)
 <!-- [![codecov](https://codecov.io/gh/tp7309/TTDeDroid/branch/master/graph/badge.svg?token=lyEWTqfeb9)](https://codecov.io/gh/tp7309/TTDeDroid) -->
 
