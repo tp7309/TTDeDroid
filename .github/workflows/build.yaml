@@ -35,9 +35,3 @@ jobs:
           coverage-file: coverage.xml
           dsn: ${{ secrets.DEEPSOURCE_DSN }}
           fail-ci-on-error: false
-        uses: deepsourcelabs/test-coverage-action@master
-        with:
-          key: python
-          coverage-file: coverage.xml
-          dsn: ${{ secrets.DEEPSOURCE_DSN }}
-          # fail-ci-on-error: false
