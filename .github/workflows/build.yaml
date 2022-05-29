@@ -24,6 +24,17 @@ jobs:
         run: |
           pytest --cov tests --cov-report xml
       - name: Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: false # optional (default = false)
+      - name: Lints
+        if: ${{matrix.os == 'ubuntu-latest'}}
+        uses: deepsourcelabs/test-coverage-action@master
+        with:
+          key: python
+          coverage-file: coverage.xml
+          dsn: ${{ secrets.DEEPSOURCE_DSN }}
+          fail-ci-on-error: false
         uses: deepsourcelabs/test-coverage-action@master
         with:
           key: python
