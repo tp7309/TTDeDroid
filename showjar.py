@@ -52,7 +52,12 @@ def newshell(command):
 def sh(command, print_msg=True):
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    result = p.stdout.read().decode('utf-8')
+    bytes_result = p.stdout.read()
+    try:
+        result = bytes_result.decode('utf-8')
+    except:
+        # fix some window system error
+        result = bytes_result.decode('gbk')
     if print_msg:
         print(result)
     return result
@@ -101,11 +106,46 @@ def rmtree(path):
 
 
 def hasexec(cmd):
+    if ' ' in cmd:
+        cmd = "\"%s\""%(cmd)
     result = sh("%s --version" % (cmd), print_msg=False)
     return not ('not found' in result or u'不是' in result)
 
 
+def find_jdkpaths():
+    jdks = []
+    # find 'java' in "JAVA_HOME" directory
+    java_home = os.environ.get('JAVA_HOME', '')
+    if java_home:
+        # java_home_parent_dir = os.path.abspath(os.path.join(java_home, os.path.pardir))
+        jdks.append(java_home)
+    # IDEA jdk path
+    jdks.append(os.path.join(os.path.join(os.path.expanduser('~'), '.jdks')))
+    if os.name == 'nt':
+        jdks.append("C:\Program Files\Android\Android Studio\jre")
+        jdks.append("D:\Program Files\Android\Android Studio\jre")
+        pass
+    elif sys.platform == 'darwin':
+        jdks.append("/Applications/Android Studio.app")
+        jdks.append("/Applications/IntelliJ IDEA CE.app")
+        jdks.append("/Applications/IntelliJ IDEA.app")
+
+    jdkpaths = []
+    java_paths = []
+    for path in jdks:
+        java_paths = java_paths + glob.glob("%s/**/java"%(path), recursive=True)
+        java_paths = java_paths + glob.glob("%s/**/java.exe"%(path), recursive=True)
+    # print(jdks)
+    for path in java_paths:
+        if hasexec(path):
+            jdkpaths.append(os.path.abspath(os.path.join(path, os.path.pardir, os.path.pardir)))
+    print("founded jdk locations:")
+    print(jdkpaths)
+    return jdkpaths
+
+
 def find_jdk11_or_greater_version():
+
     def isValidJdk(jdkpath):
         re_jdk_version = r'\"(\d+)\.(\d+)\.(\d+).*\"'
         try:
@@ -127,30 +167,39 @@ def find_jdk11_or_greater_version():
             return False
 
     # check current java version
-    if(isValidJdk('java')):
+    if (isValidJdk('java')):
         return 'java'
 
     files = []
-    # find 'java' in "JAVA_HOME" directory
-    java_home = os.environ.get('JAVA_HOME', '')
-    if java_home:
-        # print(java_home)
-        java_home_parent_dir = os.path.abspath(os.path.join(java_home, os.path.pardir))
-        print("find 'java' in java_home_parent_dir: %s"%(java_home_parent_dir))
-        files = files + glob.glob("%s/*/bin/java"%(java_home_parent_dir))
-        files = files + glob.glob("%s/*/bin/java.exe"%(java_home_parent_dir))
-    jdks_path = os.path.join(os.path.expanduser('~'), '.jdks')
-    if jdks_path:
-        print("find 'java' in %s"%(jdks_path))
-        files = files + glob.glob("%s/*/bin/java"%(jdks_path))
-        files = files + glob.glob("%s/*/bin/java.exe"%(jdks_path))
-    print("founded jdk locations:")
-    print(files)
-    for file in files:
+    jdks = find_jdkpaths()
+    if not jdks:
+        return None
+    for jdkpath in jdks:
+        file = ''
+        if os.name == 'nt':
+            file = os.path.join("%s/bin/java.exe"%(jdkpath))
+        else:
+            file = os.path.join("%s/bin/java"%(jdkpath))
         if isValidJdk(file):
             print("found jdk location(jdk>=11): %s"%(file))
             return file
     return None
+
+
+def ensure_java_home():
+    """if no default 'JAVA_HOME', try find a available java home path"""
+    jdkpaths = find_jdkpaths()
+    if not jdkpaths:
+        return False
+    # export java_home
+    java_home = os.environ.get('JAVA_HOME', '')
+    if not java_home:
+        temp_java_home = jdkpaths[0]
+        os.environ['JAVA_HOME'] = temp_java_home
+        print("no default 'JAVA_HOME' system variable, set JAVA_HOME=%s"%(temp_java_home))
+    else:
+        print("find JAVA_HOME=%s"%(java_home))
+    return True
 
 
 def openfile(path):
@@ -199,6 +248,8 @@ def jadxpath():
 
 def fernflowerpath():
     return os.path.join(FERNFLOWER, 'fernflower.jar')
+
+# -----------------------------------tool end-----------------------------------#
 
 
 def show_jar_gui(files):
@@ -365,6 +416,10 @@ def main():
     args.file = f
 
     print("output dir: %s" % (cache))
+    if not ensure_java_home():
+        print("can not found jdk, ensure jdk is installed!")
+        return
+
     if args.engine == 'jadx':
         decompile_by_jadx(cache, args)
     elif args.engine == 'enjarify':
