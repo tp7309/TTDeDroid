@@ -1,6 +1,18 @@
 #!/bin/sh
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 file="$(dirname $script_dir)/showjar.py"
+
+# check python exists
+if ! command -v python &> /dev/null
+then
+    if command -v python3 &> /dev/null
+    then
+    # if python3 exists, map 'python3' to 'python' command.
+      alias python=python3
+      echo "'python3' could be found, alias python=python3"
+    fi
+fi
+
 if [ -f "$file" ]; then
   python $file $@
 else
