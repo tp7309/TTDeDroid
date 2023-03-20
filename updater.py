@@ -6,6 +6,7 @@ import shutil
 import stat
 import os
 import glob
+from typing import Tuple
 import zipfile
 import webbrowser
 import showjar
@@ -141,9 +142,11 @@ def apktool_updater():
 def fernflower_updater():
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
-    if "not found" in sh("mvn -v"):
+    maven_version = sh("mvn -v")
+    if "not found" in maven_version or "无法将" in maven_version:
         print("please configure maven first!")
         return
+    ensure_dir(os.path.join(_SOURCE_DIR, 'fernflower'))
     os.chdir(os.path.join(_SOURCE_DIR, 'fernflower'))
     run("mvn dependency:get -DrepoUrl=https://www.jetbrains.com/intellij-repository/releases/ \
     -Dartifact=com.jetbrains.intellij.java:java-decompiler-engine:LATEST -Ddest=.")
