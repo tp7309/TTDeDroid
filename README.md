@@ -6,13 +6,13 @@ README i18n: [中文说明](https://github.com/tp7309/TTDeDroid/blob/master/READ
 
 The tool for quickly decompile **apk/aar/dex/jar**, will be updated depending on the update of libs.
 
-> - update at 2022-10-22
+> - update at 2023-03-19
 >
-> - jadx=1.4.5
+> - jadx=1.4.6
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
 > - fernflower=222.4345.14(IntelliJ IDEA official decompiler)
-> - apktool=2.6.1
+> - apktool=2.7.0
 
 # Requirements
 No need to install python environment.

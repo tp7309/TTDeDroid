@@ -19,7 +19,12 @@ _SOURCE_DIR = os.path.join(_ROOT_PATH, 'sources')
 def sh(command, print_msg=True):
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    result = p.stdout.read().decode('utf-8')
+    bytes_result = p.stdout.read()
+    try:
+        result = bytes_result.decode('utf-8')
+    except:
+        # fix some window system error
+        result = bytes_result.decode('gbk')
     if print_msg:
         print(result)
     return result
@@ -90,6 +95,7 @@ def overwrite_tree(src, dest, ignore=None):
 
 
 def dex2jar_updater():
+    print("---------------------------dex2jar_updater start---------------------------")
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
     ensure_repo('https://github.com/pxb1988/dex2jar.git', 'dex2jar')
@@ -110,6 +116,7 @@ def dex2jar_updater():
 
 
 def enjarify_updater():
+    print("---------------------------enjarify_updater start---------------------------")
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
     ensure_repo('https://github.com/Storyyeller/enjarify.git', 'enjarify')
@@ -132,14 +139,17 @@ def enjarify_updater():
 
 
 def jadx_updater():
+    print("---------------------------jadx_updater start---------------------------")
     webbrowser.open_new_tab("https://github.com/skylot/jadx/releases")
 
 
 def apktool_updater():
+    print("---------------------------apktool_updater start---------------------------")
     webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
 
 
 def fernflower_updater():
+    print("---------------------------fernflower_updater start---------------------------")
     rawdir = os.getcwd()
     os.chdir(_SOURCE_DIR)
     maven_version = sh("mvn -v")
