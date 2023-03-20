@@ -29,10 +29,10 @@ jobs:
       - name: Test
         run: |
           pytest --cov showjar --cov-report xml
-      # - name: Coverage
-      #   uses: codecov/codecov-action@v2
-      #   with:
-      #     fail_ci_if_error: false # optional (default = false)
+      - name: Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: false # optional (default = false)
       - name: Lints
         if: ${{matrix.os == 'ubuntu-20.04'}}
         uses: deepsourcelabs/test-coverage-action@master
