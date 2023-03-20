@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pytest pytest-cov
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test
         run: |
           pytest --cov showjar --cov-report xml
