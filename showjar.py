@@ -123,7 +123,7 @@ def find_jdkpaths():
     jdks.append(os.path.join(os.path.join(os.path.expanduser('~'), '.jdks')))
     if os.name == 'nt':
         jdks.append("C:\\Program Files\\Android\\Android Studio\\jre")
-        jdks.append("D:\\Program Files\Android\\Android Studio\\jre")
+        jdks.append("D:\\Program Files\\Android\\Android Studio\\jre")
         pass
     elif sys.platform == 'darwin':
         jdks.append("/Applications/Android Studio.app")
