@@ -1,4 +1,5 @@
 #!/usr/bin python3
+from configparser import ConfigParser
 import shutil
 import os
 import stat
@@ -24,8 +25,13 @@ def rmtree(path):
 
 
 def repack():
+    config = ConfigParser()
+    config.read("setup.cfg")
+    version = config.get("version_info", "version")
+    print("version: " + version)
+
     download_dir = os.path.join(os.path.expanduser('~'), 'Downloads')
-    zippath = os.path.join(download_dir, "TTDeDroid.7z")
+    zippath = os.path.join(download_dir, "TTDeDroid_%s.7z"%(version))
     destdir = os.path.abspath(os.path.join(download_dir, 'TTDeDroid'))
 
     print("start copy dir:")
@@ -43,6 +49,9 @@ def repack():
     rmtree(".history")
     rmtree("__pycache__")
     rmtree('.DS_Store')
+
+    if os.path.exists(zippath):
+        os.remove(zippath)
     print("7z a %s %s"%(zippath, os.path.join(destdir, '*')))
     subprocess.call("7z a %s %s"%(zippath, os.path.join(destdir, '*')))
     if os.path.exists(zippath):
