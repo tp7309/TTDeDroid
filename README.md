@@ -21,7 +21,7 @@ No need to install python environment.
 ### Windows
 1. go to `releases` page to download file or download source code.
 2. add `TTDedroid\bin` directory **absolute path** to `PATH` system variable.
-3. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
+3. then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be opened automatically.
 ```bash
 showjar test.apk
 ```
