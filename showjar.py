@@ -55,7 +55,7 @@ def sh(command, print_msg=True):
     bytes_result = p.stdout.read()
     try:
         result = bytes_result.decode('utf-8')
-    except:
+    except Exception:
         # fix some window system error
         result = bytes_result.decode('gbk')
     if print_msg:
@@ -122,8 +122,8 @@ def find_jdkpaths():
     # IDEA jdk path
     jdks.append(os.path.join(os.path.join(os.path.expanduser('~'), '.jdks')))
     if os.name == 'nt':
-        jdks.append("C:\Program Files\Android\Android Studio\jre")
-        jdks.append("D:\Program Files\Android\Android Studio\jre")
+        jdks.append("C:\\Program Files\\Android\\Android Studio\\jre")
+        jdks.append("D:\\Program Files\Android\\Android Studio\\jre")
         pass
     elif sys.platform == 'darwin':
         jdks.append("/Applications/Android Studio.app")
@@ -188,12 +188,12 @@ def find_jdk11_or_greater_version():
 
 def ensure_java_home():
     """if no default 'JAVA_HOME', try find a available java home path"""
-    jdkpaths = find_jdkpaths()
-    if not jdkpaths:
-        return False
     # export java_home
     java_home = os.environ.get('JAVA_HOME', '')
     if not java_home:
+        jdkpaths = find_jdkpaths()
+        if not jdkpaths:
+            return False
         temp_java_home = jdkpaths[0]
         os.environ['JAVA_HOME'] = temp_java_home
         print("no default 'JAVA_HOME' system variable, set JAVA_HOME=%s"%(temp_java_home))

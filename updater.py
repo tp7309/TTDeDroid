@@ -22,7 +22,7 @@ def sh(command, print_msg=True):
     bytes_result = p.stdout.read()
     try:
         result = bytes_result.decode('utf-8')
-    except:
+    except Exception:
         # fix some window system error
         result = bytes_result.decode('gbk')
     if print_msg:
