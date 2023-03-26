@@ -109,8 +109,7 @@ def download_file(url, store_path):
         print("\rdownloading: %5.1f%%" % (a * b * 100.0 / c), end="")
     try:
         if url.lower().startswith('http'):
-            filepath, _ = urllib.request.urlretrieve(url, store_path， reporthook=reporthook)
-            print("%s download finished!"%(filepath))
+            urllib.request.urlretrieve(url, store_path, reporthook=reporthook)
         else:
             raise ValueError from None
         if not os.path.exists(store_path):
@@ -128,9 +127,9 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
     try:
         print("download_release: %s/%s, min_publish_time: %s, destpath: %s"
               % (repo_owner, repo_name, last_update_time, destpath))
-        response = None
+        response = ''
         if url.lower().startswith('http'):
-            with urllib.Request.request(url) as connection:
+            with urllib.request.urlopen(url) as connection:
                 response = json.loads(connection.read().decode('utf-8'))
         else:
             raise ValueError from None
@@ -293,11 +292,11 @@ def initEnv():
 
 def main():
     initEnv()
-    enjarify_updater()
-    dex2jar_updater()
-    jadx_updater()
+    # enjarify_updater()
+    # dex2jar_updater()
+    # jadx_updater()
     apktool_updater()
-    fernflower_updater()
+    # fernflower_updater()
 
 
 if __name__ == '__main__':
