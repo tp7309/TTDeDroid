@@ -10,10 +10,16 @@ from typing import Tuple
 import zipfile
 import webbrowser
 import showjar
+import urllib.request
+import json
+import re
+from datetime import datetime, timedelta
 
 
 _ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 _SOURCE_DIR = os.path.join(_ROOT_PATH, 'sources')
+
+_last_update_time = datetime.now()
 
 
 def sh(command, print_msg=True):
@@ -48,7 +54,10 @@ def readonly_handler(func, path, execinfo):
 
 def rmtree(path):
     if os.path.exists(path):
-        shutil.rmtree(path, onerror=readonly_handler)
+        if os.path.isdir(path):
+            shutil.rmtree(path, onerror=readonly_handler)
+        else:
+            os.remove(path)
 
 
 def copy_git_repo(src, dest):
@@ -92,6 +101,63 @@ def overwrite_tree(src, dest, ignore=None):
                                ignore)
     else:
         shutil.copyfile(src, dest)
+
+
+def download_file(url, store_path):
+    print("found download url: %s, download file to: %s"%(url, store_path))
+    try:
+        urllib.request.urlretrieve(url, store_path)
+        if not os.path.exists(store_path):
+            print("download file failed: %s"%(store_path))
+            return False
+    except Exception as e:
+        print("download file error:")
+        print(e)
+    return True
+
+
+def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
+    """download lastest release file from github"""
+    url = "https://api.github.com/repos/%s/%s/releases/latest"%(repo_owner, repo_name)
+    try:
+        print("download_release: %s/%s, min_publish_time: %s, destpath: %s"
+              % (repo_owner, repo_name, last_update_time, destpath))
+        connection = urllib.request.urlopen(url)
+        response = json.loads(connection.read().decode('utf-8'))
+        publish_time = datetime.strptime(response['published_at'], '%Y-%m-%dT%H:%M:%SZ')
+        # debug
+        # publish_time = datetime.strptime('2023-02-20T11:33:37Z', '%Y-%m-%dT%H:%M:%SZ')
+        print("min_publish_time: %s, repo publish time: %s"%(str(last_update_time), str(publish_time)))
+        if publish_time.timetuple() <= last_update_time.timetuple():
+            print("ignore update '%s/%s'"%(repo_owner, repo_name))
+            return
+        browser_download_url = ''
+        for asset in response['assets']:
+            browser_download_url = asset['browser_download_url']
+            if re.search(refile, browser_download_url):
+                break
+        if not browser_download_url:
+            print("can not find download url %s/%s"%(repo_owner, repo_name))
+            return
+        store_path = os.path.join(_SOURCE_DIR, os.path.basename(browser_download_url))
+        if not download_file(browser_download_url, store_path):
+            return
+
+        # # unzip file
+        rmtree(showjar.CACHE_DIR)
+        if store_path.endswith('.zip'):
+            with zipfile.ZipFile(store_path, 'r') as z:
+                z.extractall(showjar.CACHE_DIR)
+            overwrite_tree(showjar.CACHE_DIR, destpath)
+        else:
+            destpath2 = destpath
+            if os.path.isdir(destpath):
+                destpath2 = os.path.join(destpath,os.path.basename(store_path))
+            shutil.copyfile(store_path, destpath2)
+
+    except Exception as e:
+        print("download release error:")
+        print(e)
 
 
 def dex2jar_updater():
@@ -140,12 +206,40 @@ def enjarify_updater():
 
 def jadx_updater():
     print("---------------------------jadx_updater start---------------------------")
-    webbrowser.open_new_tab("https://github.com/skylot/jadx/releases")
+    # webbrowser.open_new_tab("https://github.com/skylot/jadx/releases")
+    download_release('skylot', 'jadx', _last_update_time, r'jadx-\d.+\.zip', showjar.JADX)
+
+    rawdir = os.getcwd()
+    os.chdir(showjar.JADX)
+
+    # remove unused files
+    rmtree('README.md')
+    rmtree('NOTICE')
+    rmtree('LICENSE')
+
+    # update jadx script config, fix issues #7.
+    def update_jvm_opts(script_path):
+        script_path = os.path.abspath(script_path)
+        print("update_jvm_opts: %s"%(script_path))
+        content = ''
+        with open(script_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        content = content.replace('"-XX:MaxRAMPercentage=70.0"', '')
+        with open(script_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+    update_jvm_opts('bin/jadx')
+    update_jvm_opts('bin/jadx-gui')
+    update_jvm_opts('bin/jadx-gui.bat')
+    update_jvm_opts('bin/jadx.bat')
+
+    os.chdir(rawdir)
 
 
 def apktool_updater():
     print("---------------------------apktool_updater start---------------------------")
-    webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
+    # webbrowser.open_new_tab("https://ibotpeaches.github.io/Apktool/")
+    download_release('iBotPeaches', 'Apktool', _last_update_time, r'apktool-\d.+\.jar', showjar.APKTOOL)
 
 
 def fernflower_updater():
@@ -170,8 +264,22 @@ def fernflower_updater():
     os.chdir(rawdir)
 
 
-def main():
+def initEnv():
     ensure_dir(_SOURCE_DIR)
+
+    global _last_update_time
+    readme_path = os.path.join(_ROOT_PATH, 'README.md')
+    with open(readme_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+        datestring = re.search(r"update\sat\s(\d+-\d+-\d+)", content)
+        _last_update_time = datetime.strptime(datestring.group(1), '%Y-%m-%d')
+
+    # _last_update_time = _last_update_time - timedelta(days=360)
+    print("last update time: %s"%(_last_update_time))
+
+
+def main():
+    initEnv()
     enjarify_updater()
     dex2jar_updater()
     jadx_updater()
