@@ -104,10 +104,13 @@ def overwrite_tree(src, dest, ignore=None):
 
 def download_file(url, store_path):
     print("found download url: %s, download file to: %s"%(url, store_path))
+
+    def reporthook(a, b, c):
+        print("\rdownloading: %5.1f%%" % (a * b * 100.0 / c), end="")
     try:
         if url.lower().startswith('http'):
-            with urllib.request.urlretrieve(url, store_path):
-                pass
+            filepath, _ = urllib.request.urlretrieve(url, store_path， reporthook=reporthook)
+            print("%s download finished!"%(filepath))
         else:
             raise ValueError from None
         if not os.path.exists(store_path):
