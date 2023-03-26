@@ -106,7 +106,8 @@ def download_file(url, store_path):
     print("found download url: %s, download file to: %s"%(url, store_path))
     try:
         if url.lower().startswith('http'):
-            urllib.request.urlretrieve(url, store_path)
+            with urllib.request.urlretrieve(url, store_path):
+                pass
         else:
             raise ValueError from None
         if not os.path.exists(store_path):
@@ -124,12 +125,12 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
     try:
         print("download_release: %s/%s, min_publish_time: %s, destpath: %s"
               % (repo_owner, repo_name, last_update_time, destpath))
-        connection = None
+        response = None
         if url.lower().startswith('http'):
-            connection = urllib.Request.request(url)
+            with urllib.Request.request(url) as connection:
+                response = json.loads(connection.read().decode('utf-8'))
         else:
             raise ValueError from None
-        response = json.loads(connection.read().decode('utf-8'))
         publish_time = datetime.strptime(response['published_at'], '%Y-%m-%dT%H:%M:%SZ')
         # debug
         # publish_time = datetime.strptime('2023-02-20T11:33:37Z', '%Y-%m-%dT%H:%M:%SZ')
@@ -158,7 +159,7 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
         else:
             destpath2 = destpath
             if os.path.isdir(destpath):
-                destpath2 = os.path.join(destpath,os.path.basename(store_path))
+                destpath2 = os.path.join(destpath, os.path.basename(store_path))
             shutil.copyfile(store_path, destpath2)
 
     except Exception as e:
@@ -282,7 +283,7 @@ def initEnv():
         datestring = re.search(r"update\sat\s(\d+-\d+-\d+)", content)
         _last_update_time = datetime.strptime(datestring.group(1), '%Y-%m-%d')
 
-    #debug code
+    # debug code
     _last_update_time = _last_update_time - timedelta(days=0)
     print("last update time: %s"%(_last_update_time))
 
