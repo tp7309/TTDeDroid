@@ -8,7 +8,6 @@ import os
 import glob
 from typing import Tuple
 import zipfile
-import webbrowser
 import showjar
 import urllib.request
 import json
@@ -106,7 +105,10 @@ def overwrite_tree(src, dest, ignore=None):
 def download_file(url, store_path):
     print("found download url: %s, download file to: %s"%(url, store_path))
     try:
-        urllib.request.urlretrieve(url, store_path)
+        if url.lower().startswith('http'):
+            urllib.request.urlretrieve(url, store_path)
+        else:
+            raise ValueError from None
         if not os.path.exists(store_path):
             print("download file failed: %s"%(store_path))
             return False
@@ -122,7 +124,11 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
     try:
         print("download_release: %s/%s, min_publish_time: %s, destpath: %s"
               % (repo_owner, repo_name, last_update_time, destpath))
-        connection = urllib.request.urlopen(url)
+        connection = None
+        if url.lower().startswith('http'):
+            connection = urllib.Request.request(url)
+        else:
+            raise ValueError from None
         response = json.loads(connection.read().decode('utf-8'))
         publish_time = datetime.strptime(response['published_at'], '%Y-%m-%dT%H:%M:%SZ')
         # debug
@@ -220,6 +226,8 @@ def jadx_updater():
     # update jadx script config, fix issues #7.
     def update_jvm_opts(script_path):
         script_path = os.path.abspath(script_path)
+        if not script_path.startswith(showjar.JADX):
+            return
         print("update_jvm_opts: %s"%(script_path))
         content = ''
         with open(script_path, 'r', encoding='utf-8') as f:
@@ -274,7 +282,8 @@ def initEnv():
         datestring = re.search(r"update\sat\s(\d+-\d+-\d+)", content)
         _last_update_time = datetime.strptime(datestring.group(1), '%Y-%m-%d')
 
-    # _last_update_time = _last_update_time - timedelta(days=360)
+    #debug code
+    _last_update_time = _last_update_time - timedelta(days=0)
     print("last update time: %s"%(_last_update_time))
 
 
