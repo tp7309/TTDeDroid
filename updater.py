@@ -129,8 +129,8 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
               % (repo_owner, repo_name, last_update_time, destpath))
         response = ''
         if url.lower().startswith('http'):
-            with urllib.request.urlopen(url) as connection:
-                response = json.loads(connection.read().decode('utf-8'))
+            with urllib.request.urlopen(url) as f:
+                response = json.loads(f.read().decode('utf-8'))
         else:
             raise ValueError from None
         publish_time = datetime.strptime(response['published_at'], '%Y-%m-%dT%H:%M:%SZ')
