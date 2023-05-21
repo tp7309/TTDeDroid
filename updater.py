@@ -292,11 +292,11 @@ def initEnv():
 
 def main():
     initEnv()
-    # enjarify_updater()
-    # dex2jar_updater()
-    # jadx_updater()
+    enjarify_updater()
+    dex2jar_updater()
+    jadx_updater()
     apktool_updater()
-    # fernflower_updater()
+    fernflower_updater()
 
 
 if __name__ == '__main__':

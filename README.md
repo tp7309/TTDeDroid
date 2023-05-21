@@ -36,7 +36,7 @@ echo $showjardir >> ~/.bash_profile && source ~/.bash_profile
 # Linux
 echo $showjardir >> ~/.bashrc && source ~/.bashrc
 ```
-then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere, GUI will be automatically opened.
+then you can execute command for decompile `*.apk/*.aar/*.dex/*.jar` anywhere,  GUI will be opened automatically.
 ```bash
 showjar test.apk
 ```
