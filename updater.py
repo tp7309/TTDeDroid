@@ -110,9 +110,9 @@ def download_file(url, store_path):
     try:
         if url.lower().startswith('http'):
             req = urllib.request.Request(url)
-            urllib.request.urlretrieve(req, store_path, reporthook=reporthook)
         else:
             raise ValueError from None
+        urllib.request.urlretrieve(req, store_path, reporthook=reporthook)
         if not os.path.exists(store_path):
             print("download file failed: %s"%(store_path))
             return False
@@ -131,10 +131,10 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
         response = ''
         if url.lower().startswith('http'):
             req = urllib.request.Request(url)
-            with urllib.request.urlopen(req) as f:
-                response = json.loads(f.read().decode('utf-8'))
         else:
             raise ValueError from None
+        with urllib.request.urlopen(req) as f:
+            response = json.loads(f.read().decode('utf-8'))
         publish_time = datetime.strptime(response['published_at'], '%Y-%m-%dT%H:%M:%SZ')
         # debug
         # publish_time = datetime.strptime('2023-02-20T11:33:37Z', '%Y-%m-%dT%H:%M:%SZ')
