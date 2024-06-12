@@ -109,7 +109,8 @@ def download_file(url, store_path):
         print("\rdownloading: %5.1f%%" % (a * b * 100.0 / c), end="")
     try:
         if url.lower().startswith('http'):
-            urllib.request.urlretrieve(url, store_path, reporthook=reporthook)
+            req = urllib.request.Request(url)
+            urllib.request.urlretrieve(req, store_path, reporthook=reporthook)
         else:
             raise ValueError from None
         if not os.path.exists(store_path):
@@ -129,7 +130,8 @@ def download_release(repo_owner, repo_name, last_update_time, refile, destpath):
               % (repo_owner, repo_name, last_update_time, destpath))
         response = ''
         if url.lower().startswith('http'):
-            with urllib.request.urlopen(url) as f:
+            req = urllib.request.Request(url)
+            with urllib.request.urlopen(req) as f:
                 response = json.loads(f.read().decode('utf-8'))
         else:
             raise ValueError from None
