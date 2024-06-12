@@ -5,13 +5,13 @@
 
 一键反编译 **apk/aar/dex/jar**，没什么技术含量，只是调调工具命令，处理些兼容性问题，会视反编译库的更新情况更新工具版本。
 
-> - update at 2023-09-24
+> - update at 2024-06-12
 >
 > - jadx=1.4.7
 > - Storyyeller/enjarify(build by source)
 > - dex2jar(build by source)
-> - fernflower=232.9921.47(IntelliJ IDEA official decompiler)
-> - apktool=2.8.1
+> - fernflower=241.17890.1(IntelliJ IDEA official decompiler)
+> - apktool=2.9.3
 
 
 # 使用要求
@@ -23,9 +23,10 @@
 1. [去release页下载](https://github.com/tp7309/TTDeDroid/releases)，有中国下载地址能下载快些，也可以直接下载源码。
 2. 将`TTDedroid\bin`目录的 **绝对路径** 加入`PATH`环境变量。
 
-之后便可以在任何目录执行下面的目录反编译`*.apk/*.aar/*.dex/*.jar`文件，反编译完成后图形界面会自动打开。
+之后打开命令提示符(cmd)，输入如下命令即可反编译，支持的文件类型：`*.apk/*.aar/*.dex/*.jar`
+反编译完成后图形界面会自动打开。
 ```
-showjar test.apk
+showjar xxx.apk
 ```
 
 ### Mac/Linux

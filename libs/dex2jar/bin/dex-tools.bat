@@ -67,7 +67,7 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\dex-tools-2.2-SNAPSHOT.jar;%APP_HOME%\lib\dex-translator-2.2-SNAPSHOT.jar;%APP_HOME%\lib\dx-30.0.2.jar;%APP_HOME%\lib\d2j-smali-2.2-SNAPSHOT.jar;%APP_HOME%\lib\d2j-jasmin-2.2-SNAPSHOT.jar;%APP_HOME%\lib\dex-writer-2.2-SNAPSHOT.jar;%APP_HOME%\lib\d2j-base-cmd-2.2-SNAPSHOT.jar;%APP_HOME%\lib\asm-util-9.5.jar;%APP_HOME%\lib\asm-commons-9.5.jar;%APP_HOME%\lib\asm-analysis-9.5.jar;%APP_HOME%\lib\asm-tree-9.5.jar;%APP_HOME%\lib\dex-reader-2.2-SNAPSHOT.jar;%APP_HOME%\lib\dex-ir-2.2-SNAPSHOT.jar;%APP_HOME%\lib\antlr4-4.9.3.jar;%APP_HOME%\lib\antlr4-runtime-4.9.3.jar;%APP_HOME%\lib\antlr-3.5.2.jar;%APP_HOME%\lib\ST4-4.3.1.jar;%APP_HOME%\lib\antlr-runtime-3.5.2.jar;%APP_HOME%\lib\dex-reader-api-2.2-SNAPSHOT.jar;%APP_HOME%\lib\asm-9.5.jar;%APP_HOME%\lib\org.abego.treelayout.core-1.0.3.jar;%APP_HOME%\lib\javax.json-1.0.4.jar;%APP_HOME%\lib\icu4j-69.1.jar
+set CLASSPATH=%APP_HOME%\lib\dex-tools-2.x.jar;%APP_HOME%\lib\dex-translator-2.x.jar;%APP_HOME%\lib\dx-30.0.2.jar;%APP_HOME%\lib\d2j-smali-2.x.jar;%APP_HOME%\lib\d2j-jasmin-2.x.jar;%APP_HOME%\lib\dex-writer-2.x.jar;%APP_HOME%\lib\d2j-base-cmd-2.x.jar;%APP_HOME%\lib\asm-util-9.5.jar;%APP_HOME%\lib\asm-commons-9.5.jar;%APP_HOME%\lib\asm-analysis-9.5.jar;%APP_HOME%\lib\asm-tree-9.5.jar;%APP_HOME%\lib\dex-reader-2.x.jar;%APP_HOME%\lib\dex-ir-2.x.jar;%APP_HOME%\lib\antlr4-4.9.3.jar;%APP_HOME%\lib\antlr4-runtime-4.9.3.jar;%APP_HOME%\lib\antlr-3.5.2.jar;%APP_HOME%\lib\ST4-4.3.1.jar;%APP_HOME%\lib\antlr-runtime-3.5.2.jar;%APP_HOME%\lib\dex-reader-api-2.x.jar;%APP_HOME%\lib\asm-9.5.jar;%APP_HOME%\lib\org.abego.treelayout.core-1.0.3.jar;%APP_HOME%\lib\javax.json-1.0.4.jar;%APP_HOME%\lib\icu4j-69.1.jar
 
 
 @rem Execute dex-tools

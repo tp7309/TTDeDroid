@@ -225,6 +225,7 @@ def jadx_updater():
     rmtree('README.md')
     rmtree('NOTICE')
     rmtree('LICENSE')
+    print("\n")
 
     # update jadx script config, fix issues #7.
     def update_jvm_opts(script_path):
